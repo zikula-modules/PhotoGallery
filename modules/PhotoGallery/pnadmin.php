@@ -14,7 +14,7 @@
 
 function photogallery_admin_main() 
 {
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::", ACCESS_READ)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::", ACCESS_READ)) {
         return pnVarPrepHTMLDisplay(_PHOTO_NOAUTH);
     }
 
@@ -55,7 +55,7 @@ function photogallery_admin_main()
 // Modify config page load
 function photogallery_admin_modifyconfig() 
 {
-    if (!pnSecAuthAction(0, 'PhotoGallery:Config:', '::', ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::", ACCESS_EDIT)) {
         return pnVarPrepHTMLDisplay(_PHOTO_NOAUTH);
     }
 
@@ -77,10 +77,10 @@ function photogallery_admin_modifyconfig()
 function photogallery_admin_updateconfig() 
 {
     $prefs = FormUtil::getPassedValue ('preferences', array(), 'POST');
+    $url   = pnModURL('PhotoGallery', 'admin', 'main');
 
-    if (!pnSecConfirmAuthKey()) {
-        $url = pnModURL('PhotoGallery', 'admin', 'main');
-        return LogUtil::registerError (_BADAUTHKEY, null, $url);
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        return LogUtil::registerAuthidError ($url);
     }
 
     pnModSetVar('PhotoGallery', 'galleryname',    $prefs['galleryname']);
@@ -95,7 +95,7 @@ function photogallery_admin_updateconfig()
     pnModSetVar('PhotoGallery', 'imageformat',    $prefs['imageformat']);
 
     LogUtil::registerStatus (_PHOTO_CONFIGUPDATED);
-    return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    return pnRedirect($url);
 }
 
 
@@ -117,7 +117,7 @@ function photogallery_admin_editphoto()
                         
         $photo = pnModAPIFunc('PhotoGallery', 'admin', 'getphoto', $pid);
        
-        if (!pnSecAuthAction(0, 'PhotoGallery::', "::".$photo['gid'], ACCESS_EDIT)) {
+        if (!SecurityUtil::checkPermission('PhotoGallery::', "::$photo[gid]", ACCESS_EDIT)) {
             $url = pnModURL('PhotoGallery', 'admin', 'main');
             LogUtil::registerError (_PHOTO_NOAUTH, null, $url);
         }
@@ -177,9 +177,9 @@ function photogallery_admin_createphoto()
     $image      = FormUtil::getPassedValue ('image', '', 'POST');
     $uploadpic  = $_FILES['uploadpic'];
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('statusmsg', _BADAUTHKEY);
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
 
     $pid = pnModAPIFunc('PhotoGallery', 'admin', 'createphoto', array('gid'        => $gid,
@@ -221,9 +221,9 @@ function photogallery_admin_updatephoto()
     $objectid   = (int)FormUtil::getPassedValue ('objectid', '', 'POST');
     $uploadpic  = $_FILES['uploadpic'];
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('statusmsg', _BADAUTHKEY);
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
         
     // If generic identifier exists, override
@@ -271,15 +271,15 @@ function photogallery_admin_deletephoto($args)
     extract($photo);
 
     if (!$photo) {
-        pnSessionSetVar('errormsg', pnVarPrepHTMLDisplay(_PHOTO_NOSUCHPHOTO));
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerError (_PHOTO_NOSUCHPHOTO, null, $url);
     }    
         
     extract($photo);
 
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::$photo[gid]", ACCESS_DELETE)) {
-        pnSessionSetVar('errormsg', pnVarPrepHTMLDisplay(_PHOTO_NOAUTH));
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$photo[gid]", ACCESS_DELETE)) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerError (_PHOTO_NOAUTH, null, $url);
     }                                                                                                 
                                                                                  
     if (empty($confirmation)) {
@@ -293,14 +293,14 @@ function photogallery_admin_deletephoto($args)
         return $pnRender->fetch('photogallery_admin_delete.htm');
     }
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('errormsg', pnVarPrepHTMLDisplay(_BADAUTHKEY));
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
 
     if (pnModAPIFunc('PhotoGallery', 'admin', 'deletephoto', array('pid' => $photo['pid'],
                                                                    'gid' => $photo['gid']))) {
-        pnSessionSetVar('statusmsg', pnVarPrepHTMLDisplay(_PHOTO_PHOTODELETED));
+        return LogUtil::registerStatus (_PHOTO_PHOTODELETED);
     }
 
     return pnRedirect(pnModURL('PhotoGallery', 'admin', 'editgallery', array('gid'    => $photo['gid'],
@@ -334,13 +334,13 @@ function photogallery_admin_deletechecked($args)
         return $pnRender->fetch('photogallery_admin_delete.htm');
     }
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('errormsg', pnVarPrepHTMLDisplay(_BADAUTHKEY));
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
     
         
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::$gid", ACCESS_DELETE)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$gid", ACCESS_DELETE)) {
         $url = pnModURL('PhotoGallery', 'admin', 'main');
         return LogUtil::registerError (_PHOTO_NOAUTH, null, $url);
     }
@@ -366,7 +366,7 @@ function photogallery_admin_editgallery()
     $gid      = (int)FormUtil::getPassedValue ('gid');
     $objectid = (int)FormUtil::getPassedValue ('objectid');
         
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::$gid", ACCESS_EDIT)) { 
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$gid", ACCESS_EDIT)) {
         return pnVarPrepHTMLDisplay(_PHOTO_NOAUTH);
     }        
 
@@ -423,13 +423,13 @@ function photogallery_admin_editgallery()
     $pnRender->assign(pnModGetVar('PhotoGallery'));
     
     // Assign permission flags here instead of inside template as there seems to be a flaw(?)
-    if (pnSecAuthAction(0, 'PhotoGallery::', "::".$gallery['gid'], ACCESS_DELETE)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$gid", ACCESS_DELETE)) {
         $pnRender->assign('deleteperm', '1');
     }
-    if (pnSecAuthAction(0, 'PhotoGallery:Active:', "::".$gallery['gid'], ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$gid", ACCESS_EDIT)) {
         $pnRender->assign('activeperm', '1');
     } 
-    if (pnSecAuthAction(0, 'PhotoGallery::', "::".$gallery['gid'], ACCESS_ADD)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$gid", ACCESS_ADD)) {
         $pnRender->assign('addphotoperm', '1');
     }
 
@@ -449,9 +449,9 @@ function photogallery_admin_creategallery()
     $detail_template = FormUtil::getPassedValue ('detail_template');
     $photosperpage   = (int)FormUtil::getPassedValue ('photosperpage');
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('statusmsg', _BADAUTHKEY);
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
     
     if ($photosperpage == _PHOTO_NOSPANOVERRIDE) {
@@ -486,9 +486,9 @@ function photogallery_admin_updategallery()
     $photosperpage   = FormUtil::getPassedValue ('photosperpage');
     $objectid        = (int)FormUtil::getPassedValue ('objectid');
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('statusmsg', _BADAUTHKEY);
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
     
     if ($photosperpage == _PHOTO_NOSPANOVERRIDE) { 
@@ -528,9 +528,9 @@ function photogallery_admin_changegallerystatus()
         $message = _PHOTO_GALLERYDEACTIVATED;
     }
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('statusmsg', _BADAUTHKEY);
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
 
     if (pnModAPIFunc('PhotoGallery', 'admin', 'changegallerystatus', array('gid'    => $gid,
@@ -555,9 +555,9 @@ function photogallery_admin_changephotostatus()
         $message = _PHOTO_PHOTODEACTIVATED;
     }
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('statusmsg', _BADAUTHKEY);
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
 
     if (pnModAPIFunc('PhotoGallery', 'admin', 'changephotostatus', array('pid'    => $pid,
@@ -594,9 +594,9 @@ function photogallery_admin_deletegallery()
         return LogUtil::registerError (_PHOTO_NOSUCHPHOTO, null, $url);
     }    
         
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::$gid", ACCESS_DELETE)) {
-        pnSessionSetVar('errormsg', pnVarPrepHTMLDisplay(_PHOTO_NOAUTH));
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$gid", ACCESS_DELETE)) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerError (_PHOTO_NOAUTH, null, $url);
     }                                                                                                 
                                                                                  
     if (empty($confirmation)) {
@@ -609,9 +609,9 @@ function photogallery_admin_deletegallery()
         return $pnRender->fetch('photogallery_admin_delete.htm');
     }
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('errormsg', pnVarPrepHTMLDisplay(_BADAUTHKEY));
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
 
         
@@ -637,9 +637,9 @@ function photogallery_admin_incgallery()
        $message = _PHOTO_GALLERYMOVEDDOWN;
     }
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('errormsg', _BADAUTHKEY);
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
 
     if (pnModAPIFunc('PhotoGallery', 'admin', 'incgallery', array('gid'   => $gid,
@@ -663,9 +663,9 @@ function photogallery_admin_decgallery()
        $message = _PHOTO_GALLERYMOVEDUP;
     }
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('errormsg', _BADAUTHKEY);
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
 
     if (pnModAPIFunc('PhotoGallery', 'admin', 'decgallery', array('gid'   => $gid,
@@ -690,9 +690,9 @@ function photogallery_admin_incphoto() {
        $message = _PHOTO_PHOTOMOVEDDOWN;
     }
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('errormsg', _BADAUTHKEY);
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
 
     if (pnModAPIFunc('PhotoGallery', 'admin', 'incphoto', array('pid'   => $pid,
@@ -717,9 +717,9 @@ function photogallery_admin_decphoto()
        $message = _PHOTO_PHOTOMOVEDUP;
     } 
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('errormsg', _BADAUTHKEY);
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
 
     if (pnModAPIFunc('PhotoGallery', 'admin', 'decphoto', array('pid'   => $pid,
@@ -735,7 +735,7 @@ function photogallery_admin_decphoto()
 // Batch photo add page
 function photogallery_admin_batchadd() 
 {
-    if (!pnSecAuthAction(0, 'PhotoGallery:Batch:', '::', ACCESS_EDIT) || !pnSecAuthAction(0, 'PhotoGallery::', '::', ACCESS_ADD)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery:Batch:', "::$gid", ACCESS_DELETE) || !SecurityUtil::checkPermission('PhotoGallery::', "::", ACCESS_ADD)) {
         return pnVarPrepHTMLDisplay(_PHOTO_NOAUTH);
     }
                                           
@@ -771,9 +771,9 @@ function photogallery_admin_batchaddcreate()
     $photobatch_name = FormUtil::getPassedValue ('photobatch_name');
     $photobatch_desc = FormUtil::getPassedValue ('photobatch_desc');
 
-    if (!pnSecConfirmAuthKey()) {
-        pnSessionSetVar('statusmsg', _BADAUTHKEY);
-        return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
+        $url = pnModURL('PhotoGallery', 'admin', 'main');
+        return LogUtil::registerAuthidError ($url);
     }
 
     $photos_added = pnModAPIFunc('PhotoGallery', 'admin', 'batchaddcreate', array('gid'             => $gid,

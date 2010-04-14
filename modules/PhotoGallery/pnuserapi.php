@@ -14,7 +14,7 @@
 
 function photogallery_userapi_getallphotos ($args) 
 {
-    if (!pnSecAuthAction(0, 'PhotoGallery::', '::', ACCESS_READ)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::", ACCESS_READ)) {
         return array();
     }
 
@@ -66,6 +66,10 @@ function photogallery_userapi_getallphotos ($args)
 // Create a select list of available galleries
 function photogallery_userapi_galleryselectlist () 
 {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::", ACCESS_READ)) {
+        return array();
+    } 
+
     $where = 'pn_active = 1';
     $sort  = 'pn_sortorder';
     return DBUtil::selectFieldArray ('photogallery_galleries', 'name', $where, $sort, false, 'gid');
@@ -74,6 +78,10 @@ function photogallery_userapi_galleryselectlist ()
 // Create a select list of available photos
 function photogallery_userapi_photoselectlist () 
 {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::", ACCESS_READ)) {
+        return array();
+    } 
+
     $where = 'pn_active = 1';
     $sort  = 'pn_name, pn_gid';
     return DBUtil::selectFieldArray ('photogallery_photos', 'name', $where, $sort, false, 'pid');

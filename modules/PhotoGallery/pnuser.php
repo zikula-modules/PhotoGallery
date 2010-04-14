@@ -14,8 +14,7 @@
 
 function photogallery_user_main() 
 {
-
-    if (!pnSecAuthAction(0, 'PhotoGallery::', '::', ACCESS_READ)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::", ACCESS_READ)) {
         return pnVarPrepHTMLDisplay(_PHOTO_NOAUTH);
     } 
         
@@ -38,7 +37,7 @@ function photogallery_user_main()
             return false;
         } 
         foreach ($galleries as $k=>$v) {
-            if (!pnSecAuthAction(0, 'PhotoGallery::', "::$v[gid]", ACCESS_READ)) {
+            if (!SecurityUtil::checkPermission('PhotoGallery::', "::$v[gid]", ACCESS_READ)) {
                 continue;
             }
             $gSummary['gid'][$k]         = $v['gid'];
@@ -55,10 +54,7 @@ function photogallery_user_main()
 
             $where = "pn_gid = $gid";
             $gallery['numphotos'][$gallerycount-1] = DBUtil::selectObjectCount ('photogallery_photos', $where);
-
-            if (pnSecAuthAction(0, 'PhotoGallery::', "::$gid", ACCESS_EDIT)) {
-                $gallery['editlink'][$k] = 1;
-            } 
+            $gallery['editlink'] = (int)SecurityUtil::checkPermission('PhotoGallery::', "::$gid", ACCESS_EDIT);
         } 
 
         $pnRender->assign('columnwidth',intval(100/pnModGetVar('PhotoGallery', 'gallerycolumns')));
@@ -70,7 +66,7 @@ function photogallery_user_main()
         $GLOBALS['info']['title'] = pnVarPrepForDisplay(pnModGetVar('PhotoGallery', 'galleryname'));
         return $pnRender->fetch('photogallery_user_main.htm');
     } else { // Gallery exists - fetch photos and display, thumbnail (if exists), photo name, price, buy now button, and link to full photo page
-        if (!pnSecAuthAction(0, 'PhotoGallery::', "::$gid", ACCESS_READ)) {
+        if (!SecurityUtil::checkPermission('PhotoGallery::', "::$gid", ACCESS_READ)) {
             return pnVarPrepHTMLDisplay(_PHOTO_GALLERYNOTAUTH);
         } 
                      
@@ -96,10 +92,10 @@ function photogallery_user_main()
             return false;
         } 
 
-        $editable = (int)pnSecAuthAction(0, 'PhotoGallery::', "::$gid", ACCESS_EDIT);
+        $editable = (int)SecurityUtil::checkPermission('PhotoGallery::', "::$gid", ACCESS_EDIT);
         foreach ($photos as $k=>$v) {
             $photos[$k]['editable'] = $editable;
-	} 
+        } 
 
         $pnRender->assign('columnwidth',intval(100/$num_cols));
         $pnRender->assign('gid',$gid);
@@ -128,7 +124,7 @@ function photogallery_user_main()
 // Photo detail page load
 function photogallery_user_detail() 
 {
-    if (!pnSecAuthAction(0, 'PhotoGallery::', '::', ACCESS_READ)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::", ACCESS_READ)) {
         return pnVarPrepHTMLDisplay(_PHOTO_NOAUTH);
     } 
                 
@@ -150,11 +146,11 @@ function photogallery_user_detail()
         return pnVarPrepHTMLDisplay(_PHOTO_NOPHOTOFOUND);
     } 
         
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::$photo[gid]", ACCESS_READ)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$photo[gid]", ACCESS_READ)) {
         return pnVarPrepHTMLDisplay(_PHOTO_NOAUTH);
     } 
                 
-    $photo['editable'] = (int)pnSecAuthAction(0, 'PhotoGallery::', "::".$photo['gid'], ACCESS_EDIT);
+    $photo['editable'] = (int)SecurityUtil::checkPermission('PhotoGallery::', "::$photo[gid]", ACCESS_EDIT);
                         
     $pnRender = pnRender::getInstance ('PhotoGallery');
     $pnRender->assign('photo',$photo);

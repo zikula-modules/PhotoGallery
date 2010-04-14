@@ -20,7 +20,7 @@ function photogallery_adminapi_createphoto($args)
         return LogUtil::registerError (_MODARGSERROR);
     }
 
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::$args[gid]", ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$args[gid]", ACCESS_DELETE)) {
         return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
@@ -83,8 +83,8 @@ function photogallery_adminapi_updatephoto($args)
         return LogUtil::registerError (_MODARGSERROR);
     }
 
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::$gid", ACCESS_EDIT) || 
-        !pnSecAuthAction(0, 'PhotoGallery::', "::$old_gid", ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$args[gid]", ACCESS_EDIT) || 
+        !SecurityUtil::checkPermission('PhotoGallery::', "::$args[old_gid]", ACCESS_EDIT)) {
         return LogUtil::registerError (_PHOTO_NOAUTH);
     }
     
@@ -185,9 +185,8 @@ function photogallery_adminapi_deletephoto($args)
     // Get the info for this photo
     $photo = pnModAPIFunc('PhotoGallery', 'admin', 'getphoto', $args['pid']);
 
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::$photo[gid]", ACCESS_DELETE)) {
-        pnSessionSetVar('errormsg', _PHOTO_NOAUTH);
-        return false;
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$photo[gid]", ACCESS_DELETE)) {
+        return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
     $rc = DBUtil::deleteObjectByID('photogallery_photos', $args['pid'], 'pid');
@@ -234,7 +233,7 @@ function photogallery_adminapi_creategallery($args)
         return LogUtil::registerError (_MODARGSERROR);
     }
 
-    if (!pnSecAuthAction(0, 'PhotoGallery::', '::', ACCESS_ADD)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::", ACCESS_ADD)) {
         return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
@@ -263,7 +262,7 @@ function photogallery_adminapi_updategallery($args)
         return LogUtil::registerError (_MODARGSERROR);
     }
 
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::$args[gid]", ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$args[gid]", ACCESS_EDIT)) {
         return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
@@ -288,7 +287,7 @@ function photogallery_adminapi_deletegallery($args)
         return LogUtil::registerError (_MODARGSERROR);
     }
 
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::$gid", ACCESS_DELETE)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$args[gid]", ACCESS_DELETE)) {
         return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
@@ -362,7 +361,7 @@ function photogallery_adminapi_changegallerystatus($args)
         return LogUtil::registerError (_MODARGSERROR);
     }
 
-    if (!pnSecAuthAction(0, 'PhotoGallery:Active:', "::$gid", ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery:Active:', "::$args[gid]", ACCESS_EDIT)) {
         return LogUtil::registerError (_PHOTO_NOAUTH);
     }
         
@@ -388,7 +387,7 @@ function photogallery_adminapi_changephotostatus($args)
     // Get the info for this photo
     $photo = pnModAPIFunc('PhotoGallery', 'admin', 'getphoto', $args['pid']);
 
-    if (!pnSecAuthAction(0, 'PhotoGallery:Active:', "::$photo[gid]", ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery:Active:', "::$photo[gid]", ACCESS_EDIT)) {
         return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
@@ -401,7 +400,7 @@ function photogallery_adminapi_changephotostatus($args)
     return true;
 }
 
-// ORDERING FUNCTIONS
+// ORDERING FUNCTIONS -- FIXME --- still needs conversion
 
 // Increase gallery position by one or move to bottom
 function photogallery_adminapi_incgallery($args) 
@@ -409,13 +408,11 @@ function photogallery_adminapi_incgallery($args)
     extract($args);
 
     if (!isset($gid) || !is_numeric($gid)) {
-        pnSessionSetVar('errormsg', _MODARGSERROR);
-        return false;
+        return LogUtil::registerError (_MODARGSERROR);
     }
 
-    if (!pnSecAuthAction(0, 'PhotoGallery:Order:', "::$gid", ACCESS_EDIT)) {
-        pnSessionSetVar('errormsg', _PHOTO_NOAUTH);
-        return false;
+    if (!SecurityUtil::checkPermission('PhotoGallery:Order:', "::$args[gid]", ACCESS_EDIT)) {
+        return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
     $dbconn =& pnDBGetConn(true);
@@ -437,8 +434,7 @@ function photogallery_adminapi_incgallery($args)
     $result->Close();
         
     if ($order >= $total_galleries || $total_galleries == 1) {
-        pnSessionSetVar('errormsg', _PHOTO_MOVE_NONEBELOW);
-        return false;
+        return LogUtil::registerError (_PHOTO_MOVE_NONEBELOW);
     }        
     
     if ($tobot != '1') { // Move gallery down one position 
@@ -480,13 +476,11 @@ function photogallery_adminapi_decgallery($args)
     extract($args);
 
     if (!isset($gid) || !is_numeric($gid)) {
-        pnSessionSetVar('errormsg', _MODARGSERROR);
-        return false;
+        return LogUtil::registerError (_MODARGSERROR);
     }
 
-    if (!pnSecAuthAction(0, 'PhotoGallery:Order:', "::$gid", ACCESS_EDIT)) {
-        pnSessionSetVar('errormsg', _PHOTO_NOAUTH);
-        return false;
+    if (!SecurityUtil::checkPermission('PhotoGallery:Order:', "::$args[gid]", ACCESS_EDIT)) {
+        return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
     $dbconn =& pnDBGetConn(true);
@@ -508,8 +502,7 @@ function photogallery_adminapi_decgallery($args)
     $result->Close();
 
     if ($order == 1 || $total_galleries == 1) {
-        pnSessionSetVar('errormsg', _PHOTO_MOVE_NONEABOVE);
-        return false;
+        return LogUtil::registerError (_PHOTO_MOVE_NONEABOVE);
     }        
         
     if ($totop != '1') { // Move gallery up one position         
@@ -552,17 +545,15 @@ function photogallery_adminapi_incphoto($args)
     extract($args);
 
     if (!isset($pid) || !is_numeric($pid)) {
-        pnSessionSetVar('errormsg', _MODARGSERROR);
-        return false;
+        return LogUtil::registerError (_MODARGSERROR);
     }
         
     // Get the info for this photo
-    $rows = pnModAPIFunc('PhotoGallery', 'admin', 'getphoto', $pid);
-    extract($rows);
+    $photo = pnModAPIFunc('PhotoGallery', 'admin', 'getphoto', $pid);
+    //extract($rows);
 
-    if (!pnSecAuthAction(0, 'PhotoGallery:Order:', "::$gid", ACCESS_EDIT)) {
-        pnSessionSetVar('errormsg', _PHOTO_NOAUTH);
-        return false;
+    if (!SecurityUtil::checkPermission('PhotoGallery:Order:', "::$photo[gid]", ACCESS_EDIT)) {
+        return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
     $dbconn =& pnDBGetConn(true);
@@ -585,8 +576,7 @@ function photogallery_adminapi_incphoto($args)
     $result->Close();
         
     if ($order >= $total_photos || $total_photos == 1) {
-        pnSessionSetVar('errormsg', _PHOTO_MOVE_NONEBELOW);
-        return false;
+        return LogUtil::registerError (_PHOTO_MOVE_NONEBELOW);
     }
         
     if ($tobot != '1') {     // Move photo down one position            
@@ -631,17 +621,15 @@ function photogallery_adminapi_decphoto($args)
     extract($args);
 
     if (!isset($pid) || !is_numeric($pid)) {
-        pnSessionSetVar('errormsg', _MODARGSERROR);
-        return false;
+        return LogUtil::registerError (_MODARGSERROR);
     }
         
     // Get the info for this photo
-    $rows = pnModAPIFunc('PhotoGallery', 'admin', 'getphoto', $pid);
-    extract($rows);
+    $photo = pnModAPIFunc('PhotoGallery', 'admin', 'getphoto', $pid);
+    //extract($rows);
 
-    if (!pnSecAuthAction(0, 'PhotoGallery:Order:', "::$gid", ACCESS_EDIT)) {
-        pnSessionSetVar('errormsg', _PHOTO_NOAUTH);
-        return false;
+    if (!SecurityUtil::checkPermission('PhotoGallery:Order:', "::$photo[gid]", ACCESS_EDIT)) {
+        return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
     $dbconn =& pnDBGetConn(true);
@@ -664,8 +652,7 @@ function photogallery_adminapi_decphoto($args)
     $result->Close();
 
     if ($order == 1 || $total_photos == 1) {
-        pnSessionSetVar('errormsg', _PHOTO_MOVE_NONEABOVE);
-        return false;
+        return LogUtil::registerError (_PHOTO_MOVE_NONEABOVE);
     }    
         
     if ($totop != '1') {      // Move photo up one position             
@@ -711,7 +698,7 @@ function photogallery_adminapi_decphoto($args)
 // Get information for a photo
 function photogallery_adminapi_getphoto($pid) 
 {
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::", ACCESS_READ)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::", ACCESS_READ)) {
         return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
@@ -723,7 +710,7 @@ function photogallery_adminapi_getphoto($pid)
 // Get information for a gallery
 function photogallery_adminapi_getgallery($gid) 
 {
-    if (!pnSecAuthAction(0, 'PhotoGallery::', "::$gid", ACCESS_READ)) {
+    if (!SecurityUtil::checkPermission('PhotoGallery::', "::$gid", ACCESS_READ)) {
         return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
@@ -743,8 +730,7 @@ function photogallery_adminapi_batchaddcreate($args)
     extract($args);
     
     if (!$photobatch_name) {
-        pnSessionSetVar('errormsg', _PHOTO_BATCHNONAME);
-        return false;
+        return LogUtil::registerError (_PHOTO_BATCHNONAME);
     }    
 
     // Get list of files in gallery directory not processed by PhotoGallery
@@ -847,8 +833,7 @@ function photogallery_adminapi_batchaddcreate($args)
             pnModCallHooks('photo', 'create', $pid, array('module' => 'PhotoGallery'));
                     
         } else { // if $imageExt check
-            pnSessionSetVar('errormsg', _PHOTO_BATCHERROR);
-            return false;
+            return LogUtil::registerError (_PHOTO_BATCHERROR);
         }                                                                                                                                        
     }
     
