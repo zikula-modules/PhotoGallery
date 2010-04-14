@@ -52,7 +52,6 @@ function photogallery_admin_main()
 }
 
 
-
 // Modify config page load
 function photogallery_admin_modifyconfig() 
 {
@@ -60,13 +59,14 @@ function photogallery_admin_modifyconfig()
         return pnVarPrepHTMLDisplay(_PHOTO_NOAUTH);
     }
 
+    $prefs = pnModGetVar ('PhotoGallery');
     $pnRender = pnRender::getInstance ('PhotoGallery');
-    $pnRender->assign('gallerycolumnslist',range(1,8));
-    $pnRender->assign('photoscolumnslist',range(1,8));
-    $pnRender->assign('photosperpagelist',array_merge(array(_PHOTO_PAGESPAN),range(1,50)));
-    $pnRender->assign('imagequalitylist',array(10,20,30,40,50,60,70,80,90,100));
-    $pnRender->assign('imageformatlist',$GLOBALS['imageformat']);
-    $pnRender->assign(pnModGetVar('PhotoGallery'));
+    $pnRender->assign('gallerycolumnslist', range(1,8));
+    $pnRender->assign('photoscolumnslist',  range(1,8));
+    $pnRender->assign('photosperpagelist',  array_merge(array(_PHOTO_PAGESPAN),range(1,50)));
+    $pnRender->assign('imagequalitylist',   array(10,20,30,40,50,55,60,65,70,75,80,85,90,95,100));
+    $pnRender->assign('imageformatlist',    $GLOBALS['imageformat']);
+    $pnRender->assign('preferences',        $prefs);
 
     return $pnRender->fetch('photogallery_admin_modifyconfig.htm');
     
@@ -76,32 +76,23 @@ function photogallery_admin_modifyconfig()
 // Update configuration variables
 function photogallery_admin_updateconfig() 
 {
-
-    $galleryname    = FormUtil::getPassedValue ('galleryname', '', 'POST');
-    $galleryintro   = FormUtil::getPassedValue ('galleryintro', '', 'POST');
-    $photosperpage  = (int)FormUtil::getPassedValue ('photosperpage', 15, 'POST');
-    $gallerycolumns = (int)FormUtil::getPassedValue ('gallerycolumns', 2, 'POST');
-    $photocolumns   = (int)FormUtil::getPassedValue ('photocolumns', 3, 'POST');
-    $imagepath      = FormUtil::getPassedValue ('imagepath', '', 'POST');
-    $photosize      = (int)FormUtil::getPassedValue ('photosize', '', 'POST');
-    $thumbnailsize  = (int)FormUtil::getPassedValue ('thumbnailsize', '', 'POST');
-    $imageformat    = FormUtil::getPassedValue ('imageformat', '', 'POST');
+    $prefs = FormUtil::getPassedValue ('preferences', array(), 'POST');
 
     if (!pnSecConfirmAuthKey()) {
         $url = pnModURL('PhotoGallery', 'admin', 'main');
         return LogUtil::registerError (_BADAUTHKEY, null, $url);
     }
 
-    pnModSetVar('PhotoGallery', 'galleryname', $galleryname);
-    pnModSetVar('PhotoGallery', 'galleryintro', $galleryintro);
-    pnModSetVar('PhotoGallery', 'photosperpage', $photosperpage);
-    pnModSetVar('PhotoGallery', 'gallerycolumns', $gallerycolumns);
-    pnModSetVar('PhotoGallery', 'photocolumns', $photocolumns);
-    pnModSetVar('PhotoGallery', 'imagepath', $imagepath);
-    pnModSetVar('PhotoGallery', 'photosize', $photosize);
-    pnModSetVar('PhotoGallery', 'thumbnailsize', $thumbnailsize);
-    pnModSetVar('PhotoGallery', 'imagequality', $imagequality);
-    pnModSetVar('PhotoGallery', 'imageformat', $imageformat);
+    pnModSetVar('PhotoGallery', 'galleryname',    $prefs['galleryname']);
+    pnModSetVar('PhotoGallery', 'galleryintro',   $prefs['galleryintro']);
+    pnModSetVar('PhotoGallery', 'photosperpage',  $prefs['photosperpage']);
+    pnModSetVar('PhotoGallery', 'gallerycolumns', $prefs['gallerycolumns']);
+    pnModSetVar('PhotoGallery', 'photocolumns',   $prefs['photocolumns']);
+    pnModSetVar('PhotoGallery', 'imagepath',      $prefs['imagepath']);
+    pnModSetVar('PhotoGallery', 'photosize',      $prefs['photosize']);
+    pnModSetVar('PhotoGallery', 'thumbnailsize',  $prefs['thumbnailsize']);
+    pnModSetVar('PhotoGallery', 'imagequality',   $prefs['imagequality']);
+    pnModSetVar('PhotoGallery', 'imageformat',    $prefs['imageformat']);
 
     LogUtil::registerStatus (_PHOTO_CONFIGUPDATED);
     return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));

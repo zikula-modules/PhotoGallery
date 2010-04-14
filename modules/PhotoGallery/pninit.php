@@ -45,8 +45,8 @@ function photogallery_upgrade()
     switch ($oldversion) {
         case '1.0':
         case '1.0.0':
-            $rc = DBUtil::changeTable ('photogallery_galleries')
-            $rc = $rc && DBUtil::changeTable ('photogallery_photos')
+            $rc = DBUtil::changeTable ('photogallery_galleries');
+            $rc = $rc && DBUtil::changeTable ('photogallery_photos');
             break;
     }
 

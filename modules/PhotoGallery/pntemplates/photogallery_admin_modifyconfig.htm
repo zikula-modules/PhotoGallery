@@ -1,153 +1,101 @@
 <!--[include file="photogallery_admin_std_header.htm"]-->
 
-<!--[opentable]-->	
+<a id="formtop"></a>
 
-    <form method="post" action="<!--[pnmodurl modname="PhotoGallery" type="admin" func="updateconfig"]-->">
-		<div>
-        	<input type="hidden" id="authid" name="authid" value="<!--[insert name="generateauthkey" module="PhotoGallery"]-->" />
-		
-		    <table style="width: 100%; border: 0px; border-spacing: 8px;">
-		
-		        <tr style="vertical-align: top; text-align: left">
-		            <td>
-					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_GALLERYNAME"]-->:</b></span>
-					</td>
-		
-		            <td>
-					    <input type="text" id="photogallery_galleryname" name="galleryname" value="<!--[$galleryname|pnvarprepfordisplay]-->" size="40" class="pn-normal" />
-		                <br />
-						<span class="pn-sub"><!--[pnml name="_PHOTO_GALLERYNAMEDESC"]--></span>
-					</td>
-		        </tr>
-		
-		        <tr style="vertical-align: top; text-align: left">
-		            <td>
-					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_GALLERYINTRO"]-->:</b></span>
-					</td>
-		            
-					<td>
-		                <textarea id="photogallery_galleryintro" name="galleryintro" rows="3" cols="40" class="pn-normal"><!--[$galleryintro|pnvarprepfordisplay]--></textarea>
-		                <br />
-						<span class="pn-sub"><!--[pnml name="_PHOTO_GALLERYINTRODESC"]--></span>
-		            </td>
-		        </tr>
-	
-		
-		        <tr style="vertical-align: top; text-align: left">
-		            <td>
-					   <span class="pn-normal"><b><!--[pnml name="_PHOTO_GALLERYCOLUMNS"]-->:</b></span>
-					</td>
-		
-		            <td>
-					   <select id="photogallery_gallerycolumns" name="gallerycolumns" class="pn-normal">
-		                   <!--[html_options output=$gallerycolumnslist values=$gallerycolumnslist selected=$gallerycolumns]-->
-		               </select>
-		               <br /><span class="pn-sub"><!--[pnml name="_PHOTO_GALLERYCOLUMNSDESC"]--></span>
-		            </td>
-		        </tr>
-		        
-		        <tr style="vertical-align: top; text-align: left">
-		            <td>
-					   <span class="pn-normal"><b><!--[pnml name="_PHOTO_PHOTOCOLUMNS"]-->:</b></span>
-					</td>
-		
-		            <td>
-					   <select id="photogallery_photocolumns" name="photocolumns" class="pn-normal">
-		                    <!--[html_options output=$photoscolumnslist values=$photoscolumnslist selected=$photocolumns]-->
-		                </select>
-		                <br /><span class="pn-sub"><!--[pnml name="_PHOTO_PHOTOCOLUMNSDESC"]--></span>
-		            </td>
-		        </tr>			        		
+<div class="z-adminpageicon"><!--[pnimg modname='core' src='configure.gif' set='icons/large' alt=$lblSettings ]--></div>
+<h2><!--[gt text="Module Settings"]--></h2>
+<form class="z-form" action="<!--[pnmodurl modname="PhotoGallery" type="admin" func="updateconfig"]-->" method="post" enctype="application/x-www-form-urlencoded">
+	<input type="hidden" id="authid" name="authid" value="<!--[insert name="generateauthkey" module="zWebstore"]-->" />
 
-		        <tr style="vertical-align: top; text-align: left">
-		            <td>
-				        <span class="pn-normal"><b><!--[pnml name="_PHOTO_PHOTOSPERPAGE"]-->:</b></span>
-					</td>
-		        
-					<td>
-					    <select id="photogallery_photosperpage" name="photosperpage" class="pn-normal">
-		                    <!--[html_options output=$photosperpagelist values=$photosperpagelist selected=$photosperpage]-->
-		                </select>
-		                <br />
-						<span class="pn-sub"><!--[pnml name="_PHOTO_PHOTOSPERPAGEDESC"]--></span>
-					</td>
-		        </tr>
-		
-		        <tr style="vertical-align: top; text-align: left">
-		            <td>
-					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_PHOTOSIZE"]-->:</b></span>
-					</td>
-		
-		            <td>
-						<input type="text" id="photogallery_photosize" name="photosize" value="<!--[$photosize|pnvarprepfordisplay]-->" size="8" class="pn-normal" />
-		                <br />
-				        <span class="pn-sub"><!--[pnml name="_PHOTO_PHOTOSIZEDESC"]--></span>
-					</td>
-		        </tr>
-		        
-		        <tr style="vertical-align: top; text-align: left">
-		            <td>
-					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_THUMBNAILSIZE"]-->:</b></span>
-					</td>
-		
-		            <td>
-						<input type="text" id="photogallery_thumbnailsize" name="thumbnailsize" value="<!--[$thumbnailsize|pnvarprepfordisplay]-->" size="8" class="pn-normal" />
-		                <br />
-					    <span class="pn-sub"><!--[pnml name="_PHOTO_THUMBNAILSIZEDESC"]--></span>
-				    </td>
-		        </tr>
-		        
-		        <tr style="vertical-align: top; text-align: left">
-		            <td>
-					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_IMAGEFORMAT"]-->:</b></span>
-					</td>
-		
-		            <td>
-		                <select id="photogallery_imageformat" name="imageformat" class="pn-normal">
-		                    <!--[html_options options=$imageformatlist selected=$imageformat]-->
-		                </select>
-						<br />
-						<span class="pn-sub"><!--[pnml name="_PHOTO_IMAGEFORMATDESC"]--></span>
-				    </td>
-		        </tr>			        	
-		        
-		        <tr style="vertical-align: top; text-align: left">
-		            <td>
-					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_IMAGEQUALITY"]-->:</b></span>
-					</td>
-		
-		            <td>
-		                <select id="photogallery_imagequality" name="imagequality" class="pn-normal">
-		                    <!--[html_options output=$imagequalitylist values=$imagequalitylist selected=$imagequality]-->
-		                </select>
-						<br />
-					    <span class="pn-sub"><!--[pnml name="_PHOTO_IMAGEQUALITYDESC"]--></span>
-					</td>
-		        </tr>		        	        
-		
-		        <tr style="vertical-align: top; text-align: left">
-		            <td>
-					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_IMAGEPATH"]-->:</b></span>
-					</td>
-		
-		            <td>
-					    <input type="text" id="photogallery_imagepath" name="imagepath" value="<!--[$imagepath|pnvarprepfordisplay]-->" size="40" class="pn-normal" />
-		                <br />
-						<span class="pn-sub"><!--[pnml name="_PHOTO_IMAGEPATHDESC"]--></span>
-					</td>
-		        </tr>		
-		
-        </table>
+	<fieldset>
+		<legend>&nbsp;<!--[gt text="General Settings"]-->&nbsp;</legend>
+
+		<div class="z-formrow">
+			<label for="preferences_galleryname"><!--[gt text="Gallery Name"]--></label>
+			<div><input id="preferences_galleryname" type="text" name="preferences[galleryname]" size="30" maxlength="40" value="<!--[$preferences.galleryname]-->" /> <span class="pn-sub"><!--[gt text="Enter a name for this gallery which describes the photos you plan to place in it."]--><span></div>
+		</div>
+
+		<div class="z-formrow">
+			<label for="preferences_galleryintro"><!--[gt text="Gallery Intro Text"]--></label>
+			<div><textarea id="photogallery_galleryintro" name="preferences[galleryintro]" rows="3" cols="40"><!--[$preferences.galleryintro|pnvarprepfordisplay]--></textarea><span class="pn-sub"><!--[pnml name="Introductory text which appears on the start page of your PhotoGallery gallery. Line breaks and simple HTML formatting is recognized."]--></span></div>
+		</div>
+
+		<div class="z-formrow">
+			<label for="preferences_gallerycolumns"><!--[gt text="Gallery Home # of Columns"]--></label>
+			<div>
+				<select id="photogallery_gallerycolumns" name="preferences[gallerycolumns]">
+					<!--[html_options output=$gallerycolumnslist values=$gallerycolumnslist selected=$preferences.gallerycolumns]-->
+				</select>
+				<span class="pn-sub"><!--[gt text="The number of columns displaying gallery names, descriptions and images you want appearing on your gallery's home page. Take into account the size of your gallery images, the width of your Zikula theme, etc..."]--></span>
+			</div>
+		</div>
+
+		<div class="z-formrow">
+			<label for="preferences_photocolumns"><!--[gt text="Thumbnail Pages # of Columns"]--></label>
+			<div>
+				<select id="photogallery_photocolumns" name="preferences[photocolumns]">
+					<!--[html_options output=$photoscolumnslist values=$photoscolumnslist selected=$preferences.photoscolumns]-->
+				</select>
+				<span class="pn-sub"><!--[gt text="Number of columns the thumbnail pages will appear in."]--></span>
+			</div>
+		</div>
+
+		<div class="z-formrow">
+			<label for="preferences_photocolumns"><!--[gt text="Photos per Page"]--></label>
+			<div>
+				<select id="photogallery_photoperpage" name="preferences[photosperpage]">
+					<!--[html_options output=$photosperpagelist values=$photosperpagelist selected=$preferences.photosperpage]-->
+				</select>
+				<span class="pn-sub"><!--[gt text="Select the number of photos you want to appear on each gallery listing page. Page spanning will be used in the event that there are more photos to display."]--></span>
+			</div>
+		</div>
+
+		<div class="z-formrow">
+			<label for="preferences_photosize"><!--[gt text="Photo Width/Height"]--></label>
+			<div><input id="preferences_photosize" type="text" name="preferences[photosize]" size="8" maxlength="4" value="<!--[$preferences.photosize]-->" /> <span class="pn-sub"><!--[gt text="The maximum width or height your photos will be. Images will be automatically scaled to this size upon upload. Images already uploaded will remain at their current size."]--><span></div>
+		</div>
+
+		<div class="z-formrow">
+			<label for="preferences_thumbnailsize"><!--[gt text="Thumbnail Width/Height"]--></label>
+			<div><input id="preferences_thumbnailsize" type="text" name="preferences[thumbnailsize]" size="8" maxlength="4" value="<!--[$preferences.thumbnailsize]-->" /> <span class="pn-sub"><!--[gt text="The maximum width or height your photo thumbnails will be. Thumbnails will be automatically generated to be this size. Thumbnails already generated will remain at their current size."]--><span></div>
+		</div>
+
+		<div class="z-formrow">
+			<label for="preferences_imageformat"><!--[gt text=" Image Format"]--></label>
+			<div>
+				<select id="preferences_imageformat" name="preferences[imageformat]">
+					<!--[html_options options=$imageformatlist selected=$preferences.imageformat]-->
+				</select>
+				<span class="pn-sub"><!--[gt text="Format that you want scaled and uploaded images saved in."]--></span>
+			</div>
+		</div>
+
+		<div class="z-formrow">
+			<label for="preferences_imagequality"><!--[gt text="JPEG Image Quality"]--></label>
+			<div>
+				<select id="preferences_imagequality" name="preferences[imagequality]">
+					<!--[html_options output=$imagequalitylist values=$imagequalitylist selected=$preferences.imagequality]-->
+				</select>
+				<span class="pn-sub"><!--[gt text="The quality that JPEG images will be saved at when generating resized photos and thumbnails (10-100). Images already generated will remain at their current quality."]--></span>
+			</div>
+		</div>
+
+		<div class="z-formrow">
+			<label for="preferences_imagepath"><!--[gt text="Images Path"]--></label>
+			<div><input id="preferences_imagepath" type="text" name="preferences[imagepath]" size="30" maxlength="40" value="<!--[$preferences.imagepath]-->" /> <span class="pn-sub"><!--[gt text="The path on your web server where you will be uploading the images in your gallery. It should be relative from the root directory of your Zikula installation, with no slash in the front and a trailing forward slash. Remember, directory names are case-sensitive on many web setups."]--><span></div>
+		</div>
     
 		<br />
 		
-        <div style="text-align: center;">
-		    <input type="submit" id="photogallery_submit" name="submit" class="pn-normal" style="text-align: center;" value="<!--[pnml name="_PHOTO_UPDATECONFIG"]-->" />
-	         &nbsp;&nbsp;&nbsp;<input type="button" id="photogallery_cancel" name="cancel" class="pn-normal" style="text-align: center;" onclick="window.location='<!--[pnmodurl modname="PhotoGallery" type="admin" func="main"]-->'" value="<!--[pnml name="_PHOTO_CANCEL"]-->" />
-        </div>
-				
-    </div>
+		<div class="z-formbuttons">
+			<a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="modifyconfig"]-->">
+				<!--[gt text="Cancel" assign="lbl"]-->
+				<!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' alt=$lbl title=$lbl]-->
+			</a>
+			<!--[gt text="Submit" assign="lbl"]-->
+			<!--[pnbutton src='button_ok.gif' mode="input" set='icons/small' id="submit" name="submit" value="submit" alt=$lbl title=$lbl]-->
+		</div>
+	</fieldset>
 </form>
 		
-<!--[closetable]-->	
 <!--[include file="photogallery_admin_std_footer.htm"]-->
