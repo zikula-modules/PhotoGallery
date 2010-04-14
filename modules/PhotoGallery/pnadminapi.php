@@ -355,17 +355,15 @@ function photogallery_adminapi_deletegallery($args)
 // Change status of gallery (inactive/active)
 function photogallery_adminapi_changegallerystatus($args) 
 {
-    //extract($args);
-
-    if (!isset($args['gid']) || !is_numeric($args['gid']) || !isset($args['status'])) {
+    if (!isset($args['gid']) || !is_numeric($args['gid']) || !isset($args['active'])) {
         return LogUtil::registerError (_MODARGSERROR);
     }
 
     if (!SecurityUtil::checkPermission('PhotoGallery:Active:', "::$args[gid]", ACCESS_EDIT)) {
         return LogUtil::registerError (_PHOTO_NOAUTH);
     }
-        
-    $args['active'] = $args['status'] == 'inactive' ? 0 : 1;
+
+    $args['active'] = $args['active'] ? 0 : 1;
     $rc = DBUtil::updateObject ($args, 'photogallery_galleries', '', 'gid');
     if ($rc === false) {
         return LogUtil::registerError (_PHOTO_CHANGECATSTATUSFAILED);
@@ -378,21 +376,21 @@ function photogallery_adminapi_changegallerystatus($args)
 // Change status of photo (inactive/active)
 function photogallery_adminapi_changephotostatus($args) 
 {
-    //extract($args);
-
-    if (!isset($args['pid']) || !is_numeric($args['pid']) || !isset($args['status'])) {
+    if (!isset($args['pid']) || !is_numeric($args['pid']) || !isset($args['active'])) {
         return LogUtil::registerError (_MODARGSERROR);
     }
-        
-    // Get the info for this photo
-    $photo = pnModAPIFunc('PhotoGallery', 'admin', 'getphoto', $args['pid']);
+
+    $photo = DBUtil::selectObjectByID ('photogallery_photos', $pid, 'pid');
+    if (!$photo) {
+        return LogUtil::registerStatus ("Unable to retrieve photo with id [$gid]");
+    }
 
     if (!SecurityUtil::checkPermission('PhotoGallery:Active:', "::$photo[gid]", ACCESS_EDIT)) {
         return LogUtil::registerError (_PHOTO_NOAUTH);
     }
 
-    $photo['active'] = $args['status'] == 'inactive' ? 0 : 1;
-    $rc = DBUtil::updateObject ($photo, 'photogallery_photos', '', 'pid');
+    $args['active'] = $args['active'] ? 0 : 1;
+    $rc = DBUtil::updateObject ($args, 'photogallery_photos', '', 'pid');
     if ($rc === false) {
         return LogUtil::registerError (_PHOTO_CHANGEPHOTOSTATUSFAILED);
     }

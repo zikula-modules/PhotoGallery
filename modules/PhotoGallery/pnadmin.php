@@ -31,22 +31,33 @@ function photogallery_admin_main()
 
     $galleries = DBUtil::selectObjectArray ('photogallery_galleries', '', $sort, -1, -1, '', $permFilter);
 
-    $catinfo = array();
+    // get all image counts in 1 SQL statement
+    $pntables  = pnDBGetTables();
+    $tbl       = $pntables['photogallery_photos'];
+    $sql       = 'SELECT ';
+    $tSqlArray = array();
+    $columns   = array();
+    foreach ($galleries as $v) {
+        $tSqlArray[] = "(SELECT count(*) FROM $tbl WHERE pn_gid = $v[gid])";
+        $columns[]   = $dat['id'];
+    }
+    $sql    = 'SELECT ' . implode (',', $tSqlArray);
+    $res    = DBUtil::executeSQL ($sql);
+    $counts = DBUtil::marshallObjects ($res, $columns);
+    $cnt    = 0;
+    foreach ($counts['0'] as $k=>$v) {
+            $galleries[$cnt++]['photocount'] = $v;
+    }
+
     foreach ($galleries as $k=>$v) {
-        $catinfo['gid'][$k]        = $v['gid'];
-        $catinfo['cat_name'][$k]   = $v['name'];
-        $catinfo['active'][$k]     = $v['active'];
-        $catinfo['photocount'][$k] = DBUtil::selectObjectCountByID ('photogallery_photos', $v['gid'], 'gid');
-        $catinfo['activeperm'][$k] = (int)pnSecAuthAction(0, 'PhotoGallery:Active:', "::$v[gid]", ACCESS_EDIT);
-        $catinfo['activeperm'][$k] = (int)pnSecAuthAction(0, 'PhotoGallery:Order:', "::$v[gid]", ACCESS_EDIT);
-        $catinfo['addphoto'][$k]   = (int)pnSecAuthAction(0, 'PhotoGallery:Order:', "::$v[gid]", ACCESS_EDIT);
-        $catinfo['orderperm'][$k]  = (int)pnSecAuthAction(0, 'PhotoGallery::', "::$v[gid]", ACCESS_ADD);
+        $galleries[$k]['activeperm'] = (int)pnSecAuthAction(0, 'PhotoGallery:Active:', "::$v[gid]", ACCESS_EDIT);
+        $galleries[$k]['orderperm']  = (int)pnSecAuthAction(0, 'PhotoGallery:Order:', "::$v[gid]", ACCESS_EDIT);
+        $galleries[$k]['addphoto']   = (int)pnSecAuthAction(0, 'PhotoGallery::', "::$v[gid]", ACCESS_ADD);
     } 
 
     $pnRender = pnRender::getInstance ('PhotoGallery');
-    $pnRender->assign('gallerycount',count($galleries));
-    $pnRender->assign('catinfo',$catinfo);
-    $pnRender->assign('authid',pnSecGenAuthKey());
+    $pnRender->assign('gallerycount', count($galleries));
+    $pnRender->assign('objectArray', $galleries);
 
     return $pnRender->fetch('photogallery_admin_main.htm');
 }
@@ -519,54 +530,57 @@ function photogallery_admin_updategallery()
 // Change gallery status (active/inactive)
 function photogallery_admin_changegallerystatus() 
 {
-    $gid    = (int)FormUtil::getPassedValue ('gid');
-    $status = FormUtil::getPassedValue ('status');
-        
-    if ($status == 'active') {
-        $message = _PHOTO_GALLERYACTIVATED;
-    } else { 
-        $message = _PHOTO_GALLERYDEACTIVATED;
-    }
+    $gid = (int)FormUtil::getPassedValue ('gid');
+    $url = pnModURL('PhotoGallery', 'admin', 'main');
 
     if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
-        $url = pnModURL('PhotoGallery', 'admin', 'main');
         return LogUtil::registerAuthidError ($url);
     }
 
+    // need to do this here so we know the gallery status
+    $gallery = DBUtil::selectObjectByID ('photogallery_galleries', $gid, 'gid');
+    if (!$gallery) {
+        return LogUtil::registerStatus ("Unable to retrieve gallery with id [$gid]");
+    }
+
     if (pnModAPIFunc('PhotoGallery', 'admin', 'changegallerystatus', array('gid'    => $gid,
-                                                                           'status' => $status))) {
+                                                                           'active' => $gallery['active']))) {
+        if ($gallery['active']) {
+            $message = _PHOTO_GALLERYDEACTIVATED;
+        } else { 
+            $message = _PHOTO_GALLERYACTIVATED;
+        }
+
         LogUtil::registerStatus ($message);
     }
 
-    return pnRedirect(pnModURL('PhotoGallery', 'admin', 'main'));
+    return pnRedirect($url);
 }
 
 
 // Change photo status (active/inactive)
 function photogallery_admin_changephotostatus() 
 {
-    $gid    = (int)FormUtil::getPassedValue ('gid');
-    $pid    = (int)FormUtil::getPassedValue ('pid');
-    $status = FormUtil::getPassedValue ('status');
+    $pid = (int)FormUtil::getPassedValue ('pid');
         
-    if ($status == 'active') {
-        $message = _PHOTO_PHOTOACTIVATED;
-    } else { 
-        $message = _PHOTO_PHOTODEACTIVATED;
-    }
-
     if (!SecurityUtil::confirmAuthKey('PhotoGallery')) {
         $url = pnModURL('PhotoGallery', 'admin', 'main');
         return LogUtil::registerAuthidError ($url);
     }
 
     if (pnModAPIFunc('PhotoGallery', 'admin', 'changephotostatus', array('pid'    => $pid,
-                                                                         'status' => $status))) {
+                                                                         'active' => $photo['active']))) {
+        if ($photo['active']) {
+            $message = _PHOTO_PHOTOACTIVATED;
+        } else { 
+            $message = _PHOTO_PHOTODEACTIVATED;
+        }
+
         LogUtil::registerStatus ($message);
     }
 
-    return pnRedirect(pnModURL('PhotoGallery', 'admin', 'editgallery', array('gid'    => $gid,
-                                                                             'authid' => $authid)));
+    $url = pnModURL('PhotoGallery', 'admin', 'editgallery', array('gid' => $photo['gid']));
+    return pnRedirect($url);
 }
 
 
