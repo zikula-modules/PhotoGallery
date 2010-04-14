@@ -1,29 +1,25 @@
-<!--[*  $Id: photogallery_admin_menu.htm,v 1.0 2006/12/27 11:32:47 nate_02631 Exp $  *]-->
-<!--[*  Outputs top menu for administration screen for access to primary functions   *]-->
+<!--[admincategorymenu]-->
 
-<!--[pnsecauthaction realm="0" comp="PhotoGallery::" inst=".*" level="ACCESS_DELETE" assign="editgallery"]-->
+<!--[securityutil_checkpermission assign="adminAuth" component="PhotoGallery::" instance="::" level="ACCESS_ADMIN"]-->
+<!--[securityutil_checkpermission assign="addAuth" component="PhotoGallery::" instance="::" level="ACCESS_ADD"]-->
+<!--[securityutil_checkpermission assign="deleteAuth" component="PhotoGallery::" instance="::" level="ACCESS_DELETE"]-->
+<!--[securityutil_generateauthkey assign="authid" module="PhotoGallery"]-->
 
-<!--[pnsecauthaction realm="0" comp="PhotoGallery::" inst=".*" level="ACCESS_ADMIN" assign="admin"]-->
+<div class="z-adminbox">
+	<h1>PhotoGallery</h1>
+	<div class="z-menu">
+		<span class="z-menuitem-title">
+			<a id="top"></a>
+			[
+			<a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="main" authid=$authid]-->"><!--[pnml name="_PHOTO_MAIN"]--></a> |
+			<!--[if ($addAuth)]-->	
+				| <a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="editphoto" authid=$authid]-->"><!--[pnml name="_PHOTO_ADDPHOTO"]--></a> 
+				| <a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="editgallery" authid=$authid]-->"><!--[pnml name="_PHOTO_ADDGALLERY"]--></a>
+			<!--[/if]-->
+			<!--[if $adminAuth]-->	
+				| <a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="batchadd" authid=$authid]-->" class="pn-normal"><!--[pnml name="_PHOTO_BATCHADD"]--></a>
+				| <a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="modifyconfig" authid=$authid]-->" class="pn-normal"><!--[pnml name="_PHOTO_UPDATECONFIG"]--></a>
+			<!--[/if]-->
+    		</span>
+	</div>
 
-<div style="text-align: center;">
-
-		<span class="pn-normal">
-		    [&nbsp;
-	<a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="main" authid=$authid]-->" class="pn-normal"><!--[pnml name="_PHOTO_MAIN"]--></a> 
-		
-        <!--[if $editgallery]-->	
-            | <a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="editphoto" authid=$authid]-->" class="pn-normal"><!--[pnml name="_PHOTO_ADDPHOTO"]--></a>
-
-            | <a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="editgallery" authid=$authid]-->" class="pn-normal"><!--[pnml name="_PHOTO_ADDGALLERY"]--></a>
-        <!--[/if]-->
-        
-         <!--[if $admin]-->	
-            | <a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="batchadd" authid=$authid]-->" class="pn-normal"><!--[pnml name="_PHOTO_BATCHADD"]--></a>
-            | <a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="modifyconfig" authid=$authid]-->" class="pn-normal"><!--[pnml name="_PHOTO_UPDATECONFIG"]--></a>
-        <!--[/if]-->
-        &nbsp;]
-    </span>
-
-</div>
-
-<br />

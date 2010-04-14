@@ -1,24 +1,12 @@
-<!--[*  $Id: PhotoGallery_admin_batchadd.htm,v 1.0 2007/01/05 09:57:27 nate_02631 Exp $              *]-->
-<!--[*  Outputs the Batch Add Photo screen for batch adding photos upload to gallery image directory *]-->
+<!--[include file="photogallery_admin_std_header.htm"]-->
 
-<!--[pnsecgenauthkey module="PhotoGallery" assign="authid"]-->
-
-<!--[admincategorymenu]-->
 <!--[opentable]-->	
 
-    <div style="text-align: center">
-        <!--[opentable2]-->
-            <span class="pn-pagetitle"><!--[pnml name="_PHOTO_TITLE"]-->: <!--[pnml name="_PHOTO_BATCHADD"]--></span>
-        <!--[closetable2]-->	
-
-        <!--[include file="photogallery_admin_menu.htm" authid=$authid]-->
-    </div>
-    
     <div class="pn-sub"><!--[pnml name="_PHOTO_BATCHINTRO" html=1]--></div>
 	
     <form method="post"  enctype="multipart/form-data" action="<!--[pnmodurl modname="PhotoGallery" type="admin" func="batchaddcreate"]-->">
 		<div>	
-        <input type="hidden" id="photogallery_authid" name="authid" value="<!--[$authid]-->" />
+        	<input type="hidden" id="authid" name="authid" value="<!--[insert name="generateauthkey" module="PhotoGallery"]-->" />
 		
 	    <table style="width: 100%; border: 0px; border-spacing: 8px;">
 	    
