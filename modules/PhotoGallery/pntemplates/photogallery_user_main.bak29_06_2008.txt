@@ -1,0 +1,71 @@
+<!--[pnmodgetvar module="PhotoGallery" assign="num_cols" name="gallerycolumns"]-->
+<!--[pnmodgetvar module="PhotoGallery" assign="galleryintro" name="galleryintro"]-->
+<!--[pnmodgetvar module="PhotoGallery" assign="imagepath" name="imagepath"]-->
+<!--[pnmodgetvar module="PhotoGallery" assign="galleryconfigname" name="galleryname"]-->
+<!--[pagesetter_title title=$galleryconfigname]-->
+
+<!--[pnsecauthaction realm="0" comp="PhotoGallery::" inst=".*" level="ACCESS_DELETE" assign="delete"]-->
+<!--[if $delete]-->
+<!--[include file="photogallery_admin_menu.htm"]-->
+<!--[/if]-->
+<!--[if $gallerycount]-->
+
+<h3><!--[$galleryconfigname|pnmodcallhooks|pnvarprephtmldisplay]--></h3>
+<p><!--[$galleryintro]--></p>
+    <!--[*  Loop through and output active galleries in table - # of columns based on config options *]-->
+<table style="width: 100%; border: 0; margin: 0; padding: 0;">
+<tr style="vertical-align: top; text-align: left;">
+<!--[assign var="cellcount" value="0"]--> 
+<!--[section name=key loop=$gallery.gid]--> 
+    <!--[if $cellcount == $num_cols]-->
+	        <tr style="vertical-align: top; text-align: left">
+	        <!--[assign var="cellcount" value="0"]--> 
+    <!--[/if]-->		
+  <td style="width: <!--[$columnwidth]-->%;">
+
+            <table style="border: 0; margin: 0; padding: 0;">
+			    <tr style="vertical-align: top; text-align: left">
+	<!--[if $gallery.thumbnail[key] != '']-->
+	<div style="float: left; width: 110px; margin: 0; padding: 0;">
+	<div style="float: left; width: 100px; height: 100px; margin: 0; padding: 0; background: url(<!--[$imagepath]--><!--[pnml name="_PHOTO_IMAGEPREFIX"]--><!--[$gallery.thumbnail[key]]--><!--[pnml name="_PHOTO_SMALLIMAGESUFFIX"]-->.<!--[$gallery.image[key]]-->) no-repeat 50% 0;">	
+
+	</div>
+                    <!--[/if]-->
+		            <td>
+				        <span class="pn-title"><a href="<!--[pnmodurl modname=photogallery func=main gid=$gallery.gid[key]]-->&amp;title=<!--[$gallery.galleryname[key]|replace:" ":"."|regex_replace:"/[^a-zA-Z0-9_\.]/":""]-->" class="pn-title"><!--[$gallery.galleryname[key]|pnmodcallhooks|pnvarprephtmldisplay]--></a></span>
+		                <span class="pn-normal">
+		                <!--[if $gallery.desc[key] != '']-->
+		                    <br /><!--[$gallery.desc[key]|pnmodcallhooks|pnvarprephtmldisplay|nl2br]-->
+                        <!--[/if]-->
+				        </span>
+				        <br /><span class="pn-sub"><!--[pnml name="_PHOTO_THEREARE"]--> <b><!--[$gallery.numphotos[key]]--></b> <!--[pnml name="_PHOTO_PHOTOSINGAL"]-->
+				        <!--[if $gallery.editlink[key]]-->
+				            &nbsp;&nbsp;[&nbsp;<a href="<!--[pnmodurl modname=photogallery type=admin func=editgallery gid=$gallery.gid[key]]-->" class="pn-sub"><!--[pnml name="_PHOTO_EDIT"]--></a>&nbsp;]
+                        <!--[/if]-->        
+                        </span>
+		            </td>
+				</tr>
+			</table>
+  </td>
+    <!--[assign var="cellcount" value=$cellcount+1]--> 
+    <!--[if $cellcount == $num_cols]-->
+        </tr>
+            <!--[/if]-->			
+        <!--[/section]-->
+				
+        <!--[if $cellcount != $num_cols]-->
+            <td colspan="<!--[$num_cols-$cellcount]-->">&nbsp;</td></tr>
+        <!--[/if]-->	
+    </table>
+
+<!--[else]-->
+    <!--[*  Output empty gallery message if no categories are found  *]--> 
+    <br />
+	<br />
+    <div style="text-align: center">
+	    <span class="pn-normal"><!--[pnml name="_PHOTO_NOCATEGORIES"]--></span>
+	</div>
+    <br />
+	<br />
+	<br />
+<!--[/if]--> 				 

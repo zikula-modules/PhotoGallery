@@ -1,0 +1,29 @@
+<!--[pnmodgetvar module="PhotoGallery" assign="galleryconfigname" name="galleryname"]-->
+<!--[pnmodgetvar module="PhotoGallery" assign="imagepath" name="imagepath"]-->
+<div id="MenuContainer"><div id="inner_MenuContainer">
+<h3><a href="<!--[pnmodurl modname=PhotoGallery func=main]-->" title="Terug naar het overzicht van <!--[pnml name=$galleryconfigname|pnmodcallhooks|pnvarprephtmldisplay]-->"><!--[pnml name=$galleryconfigname|pnmodcallhooks|pnvarprephtmldisplay]--></a> &raquo; <!--[$galleryname|pnmodcallhooks|pnvarprephtmldisplay]--></h3>
+   <p class="desc"><!--[$gallerydesc|pnmodcallhooks|pnvarprephtmldisplay|nl2br]--></p>
+   <!--[photogalleryspanlinks total=$total photosperpage=$photosperpage startnum=$startnum gid=$gid]-->
+   <div id="lh_thumbs">
+<!--[*  Loop through and output photo thumbnails in table - # of columns based on config options *]-->
+<table style="width: 100%; border: 0; margin: 0; padding: 0;">
+<tr style="vertical-align: top; text-align: center"><!--[assign var="cellcount" value="0"]--><!--[assign var=count value="0"]-->
+<!--[foreach from=$photos item='photo']-->
+   <!--[if $cellcount == $num_cols]-->
+   <tr style="vertical-align: top; text-align: center"><!--[assign var="cellcount" value="0"]--> 
+   <!--[/if]-->		
+	<td style="width: <!--[$columnwidth]-->%; text-align: center;">
+	
+	<!--[if ($photo.image)]-->
+	<a href="<!--[pnmodurl modname=PhotoGallery func=detail pid=$photo.pid startnum=$startnum]-->&amp;title=<!--[$photo.name|replace:" ":"_"|regex_replace:"/[^a-zA-Z0-9_\.]/":""]-->" title="<!--[$photo.name|pnvarprephtmldisplay|pnvarcensor]-->"><img src="<!--[$imagepath]--><!--[pnml name="_PHOTO_IMAGEPREFIX"]--><!--[$photo.pid]--><!--[pnml name="_PHOTO_SMALLIMAGESUFFIX"]-->.<!--[$photo.image]-->" alt="<!--[$photo.name|pnvarprephtmldisplay|pnvarcensor]-->" class="image" /></a>
+	<!--[/if]-->
+	</td>
+	<!--[assign var="cellcount" value=$cellcount+1]--> 
+	<!--[if $cellcount == $num_cols]-->
+   </tr>
+   <!--[/if]-->			
+<!--[/foreach]-->
+<!--[if $cellcount != $num_cols]--><td colspan="<!--[$num_cols-$cellcount]-->"></td></tr><!--[/if]-->	
+</table>
+   </div>
+</div></div>

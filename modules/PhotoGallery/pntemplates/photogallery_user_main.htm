@@ -1,0 +1,31 @@
+<!--[pnmodgetvar module="PhotoGallery" assign="num_cols" name="gallerycolumns"]-->
+<!--[pnmodgetvar module="PhotoGallery" assign="imagepath" name="imagepath"]-->
+<!--[pnmodgetvar module="PhotoGallery" assign="galleryconfigname" name="galleryname"]-->
+<div id="MenuContainer"><div id="inner_MenuContainer">
+<table style="width: 100%; border: 0; margin: 0; padding: 0;">
+<tr style="vertical-align: top; text-align: left">
+<!--[assign var="cellcount" value="0"]--> 
+<!--[section name=key loop=$gallery.gid]--> 
+   <!--[if $cellcount == $num_cols]-->
+	<tr style="vertical-align: top; text-align: left">
+	<!--[assign var="cellcount" value="0"]--> 
+   <!--[/if]-->		
+	<td style="width: <!--[$columnwidth]-->%; padding: 0; margin: 0;">
+	    <table style="border: 0; margin: 0; padding: 0;">
+	    <tr><td colspan="2"><h3><a href="<!--[pnmodurl modname=photogallery func=main gid=$gallery.gid[key]]-->&amp;title=<!--[$gallery.galleryname[key]|replace:" ":"_"|regex_replace:"/[^a-zA-Z0-9_\.]/":""]-->" title="<!--[$gallery.galleryname[key]|pnvarprephtmldisplay|pnvarcensor]-->"><!--[$gallery.galleryname[key]|pnmodcallhooks|pnvarprephtmldisplay]--></a></h3></td></tr>
+	    <tr>
+		<td><!--[if $gallery.thumbnail[key] != '']--><a href="<!--[pnmodurl modname=photogallery func=main gid=$gallery.gid[key]]-->&amp;title=<!--[$gallery.galleryname[key]|replace:" ":"_"|regex_replace:"/[^a-zA-Z0-9_\.]/":""]-->" title="<!--[$gallery.galleryname[key]|pnvarprephtmldisplay|pnvarcensor]-->"><img src="<!--[$imagepath]--><!--[pnml name="_PHOTO_IMAGEPREFIX"]--><!--[$gallery.thumbnail[key]]--><!--[pnml name="_PHOTO_SMALLIMAGESUFFIX"]-->.<!--[$gallery.image[key]]-->" class="image" alt="<!--[$gallery.galleryname[key]|pnvarprephtmldisplay|pnvarcensor]-->" /></a><!--[/if]--></td>
+		<td style="vertical-align: top; text-align: left; margin: 0; padding: 0;"><!--[if $gallery.desc[key] != '']--><p class="desc"><!--[$gallery.desc[key]|pnmodcallhooks|pnvarprephtmldisplay|nl2br]--></p><!--[/if]--></td>
+	    </tr>
+	    <!--[* <tr><td colspan="2"><p class="info"><!--[pnml name="_PHOTO_THEREARE"]--> <strong><!--[$gallery.numphotos[key]]--></strong> <!--[pnml name="_PHOTO_PHOTOSINGAL"]--></p></td></tr> *]-->
+	    <!--[if $gallery.editlink[key]]--><tr><td colspan="2" style="border: 1px solid #ffffff;">[&nbsp;<a href="<!--[pnmodurl modname=photogallery type=admin func=editgallery gid=$gallery.gid[key]]-->" class="pn-sub"><!--[pnml name="_PHOTO_EDIT"]--></a>&nbsp;]</td></tr><!--[/if]-->
+	    </table>
+        </td>
+	<!--[assign var="cellcount" value=$cellcount+1]--><!--[if $cellcount == $num_cols]-->
+        </tr><!--[/if]-->			
+        <!--[/section]-->
+        <!--[if $cellcount != $num_cols]-->
+            <td colspan="<!--[$num_cols-$cellcount]-->">&nbsp;</td></tr>
+        <!--[/if]-->	
+</table> 
+</div></div>

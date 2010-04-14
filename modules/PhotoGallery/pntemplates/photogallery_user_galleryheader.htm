@@ -1,0 +1,4 @@
+<!--[*  $Id: photogallery_user_galleryheader.htm,v 1.0 2006/12/27 11:23:32 nate_02631 Exp $     *]-->
+<!--[*  Outputs the PhotoGallery gallery header for all pages - grabs gallery name from config  *]-->
+<!--[pnmodgetvar module="PhotoGallery" assign="galleryconfigname" name="galleryname"]-->
+<h2><!--[pnml name=$galleryconfigname|pnmodcallhooks|pnvarprephtmldisplay]--></h2>

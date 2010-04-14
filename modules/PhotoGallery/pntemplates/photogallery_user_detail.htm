@@ -1,0 +1,49 @@
+<!--[pnmodgetvar module="PhotoGallery" assign="imagepath" name="imagepath"]-->
+<!--[pnmodgetvar module="PhotoGallery" assign="galleryconfigname" name="galleryname"]-->
+   <div id="lh_thumbs2">
+	<!--[if isset($photolist.nextkey)]--><a href="<!--[pnmodurl modname=PhotoGallery func=detail pid=$photolist.pid[$photolist.nextkey] startnum=$startnum]-->&amp;title=<!--[$photolist.photoname[$photolist.nextkey]|replace:" ":"."|regex_replace:"/[^a-zA-Z0-9_\.]/":""]-->" title="<!--[pnml name="_VIEW"]--> <!--[pnml name="_NEXT_PHOTO"]-->: <!--[$photolist.photoname[$photolist.nextkey]|pnvarprephtmldisplay]-->"><!--[/if]--><!--[if $photo.image != ""]--><img src="<!--[$imagepath]--><!--[pnml name="_PHOTO_IMAGEPREFIX"]--><!--[$photo.pid]--><!--[pnml name="_PHOTO_LARGEIMAGESUFFIX"]-->.<!--[$photo.image]-->" alt="<!--[$photo.photoname|pnvarprephtmldisplay|pnvarcensor]-->" style="padding: 0; margin: 0; border: 0;" /><!--[if isset($photolist.nextkey)]--><!--[/if]--></a><!--[/if]-->
+   </div>
+<div id="MenuContainer2"><div id="inner_MenuContainer">
+   <p class="links" style="float: right;"><!--[if isset($photolist.prevkey)]--><a href="<!--[pnmodurl modname=PhotoGallery func=detail pid=$photolist.pid[$photolist.prevkey] startnum=$startnum]-->&amp;title=<!--[$photolist.photoname[$photolist.prevkey]|replace:" ":"."|regex_replace:"/[^a-zA-Z0-9_\.]/":""]-->" title="<!--[pnml name="_VIEW"]--> <!--[pnml name="_PREVIOUS_PHOTO"]-->: <!--[$photolist.photoname[$photolist.prevkey]|pnvarprephtmldisplay]-->">&lt;&lt;&nbsp;<!--[pnml name="_PREVIOUS_PHOTO"]--></a>&nbsp;&nbsp;<!--[/if]-->					<!--[if isset($photolist.nextkey)]-->&nbsp;&nbsp;<a href="<!--[pnmodurl modname=PhotoGallery func=detail pid=$photolist.pid[$photolist.nextkey] startnum=$startnum]-->&amp;title=<!--[$photolist.photoname[$photolist.nextkey]|replace:" ":"."|regex_replace:"/[^a-zA-Z0-9_\.]/":""]-->" title="<!--[pnml name="_VIEW"]--> <!--[pnml name="_NEXT_PHOTO"]-->: <!--[$photolist.photoname[$photolist.nextkey]|pnvarprephtmldisplay]-->"><!--[pnml name="_NEXT_PHOTO"]-->&nbsp;&gt;&gt;</a><!--[/if]--></p>
+<!--[*   <p class="links">Afbeelding <!--[$photolist.thisphotocount]--> van <!--[$photolist.totalphotocount]-->&nbsp;|&nbsp;<!--[$photo.galleryname|pnmodcallhooks|pnvarprephtmldisplay]--></p> *]-->
+   <h3><a href="<!--[pnmodurl modname=PhotoGallery func=main]-->" title="Terug naar het overzicht van <!--[pnml name=$galleryconfigname|pnmodcallhooks|pnvarprephtmldisplay]-->"><!--[pnml name=$galleryconfigname|pnmodcallhooks|pnvarprephtmldisplay]--></a> &raquo; <a href="<!--[pnmodurl modname=photogallery func=main gid=$photo.gid startnum=$startnum]-->" class="pn-sub"><!--[$photo.galleryname|pnmodcallhooks|pnvarprephtmldisplay]--></a></h3>
+   <p class="desc"><!--[$photo.gallerydesc|pnmodcallhooks|pnvarprephtmldisplay|nl2br]--></p>
+   <!--[if $uid > "1"]-->
+	<ul>
+	<li><!--[pnml name="_PHOTO_ADDEDON"]-->: <!--[$photo.dateadded|pnmodcallhooks|pnvarprephtmldisplay|date_format:"%d.%m.%Y"]--></li>
+	<li><!--[pnml name="_PHOTO_VIEWS"]-->: <!--[$photo.hits|number_format|pnmodcallhooks|pnvarprephtmldisplay]--></li>
+	<!--[if $photo.editable]-->
+	<li><a href="<!--[pnmodurl modname=PhotoGallery type=admin func=editphoto pid=$photo.pid]-->" class="pn-sub"><!--[pnml name="_PHOTO_EDIT"]--></a></li>
+	<!--[/if]-->
+	</ul>
+   <!--[/if]-->
+
+<!--[*  The section loop below shows how to loop through the image info of all photos in this gallery
+
+    Output of photolist:<br />
+    <!--[section name=key loop=$photolist.pid]--> 
+        <!--[$imagepath]--><!--[pnml name="_PHOTO_IMAGEPREFIX"]--><!--[$photolist.pid[key]]--><!--[pnml name="_PHOTO_LARGEIMAGESUFFIX"]-->.<!--[$photolist.image[key]]--><br />
+        <!--[$photolist.photoname[key]|pnmodcallhooks|pnvarprephtmldisplay]--><br />
+        <!--[$photolist.desc[key]|pnmodcallhooks|pnvarprephtmldisplay|nl2br]--><br />
+        Hits: <!--[$photolist.hits[key]|number_format|pnmodcallhooks|pnvarprephtmldisplay]--><br />        
+        Date added: <!--[$photolist.dateadded[key]|pnmodcallhooks|pnvarprephtmldisplay]--><br /><br />
+    <!--[/section]-->
+
+    Array key of previous and next photos in gallery...<br />
+    Prev key: <!--[$photolist.prevkey]--> Next key: <!--[$photolist.nextkey]--> 
+    <br /><br />
+    Use it to fetch info on previous and next photo such as the pid below...
+    <br />
+    PID of previous photo: <!--[$photolist.pid[$photolist.prevkey]]--> PID of next photo: <!--[$photolist.pid[$photolist.nextkey]]-->
+    <br /><br />
+    
+    You can also add links to jump to the first and last photo :    
+    <a href="<!--[pnmodurl modname=PhotoGallery func=detail pid=$photolist.pid[0]]-->" title="First photo: <!--[$photolist.photoname[0]|pnvarprephtmldisplay]-->">|&lt;&nbsp;First Photo</a>
+    <!--[assign var="lastphoto" value=$photolist.totalphotocount-1]-->
+    &nbsp;&nbsp;<a href="<!--[pnmodurl modname=PhotoGallery func=detail pid=$photolist.pid[$lastphoto]]-->" title="Last photo: <!--[$photolist.photoname[$lastphoto]|pnvarprephtmldisplay]-->">Last Photo&nbsp;&gt;|</a>
+				            
+ *]-->
+<!--[*  Call any hooks attached to this object - not working? *]-->
+<!--[pnmodurl modname=PhotoGallery func=detail pid=$photo.pid assign=returnurl]-->
+<!--[pnmodcallhooks hookobject=item hookaction=display hookid=$photo.pid module=PhotoGallery returnurl=$returnurl]-->
+</div></div>

@@ -1,0 +1,108 @@
+<!--[*  $Id: PhotoGallery_admin_main.htm,v 1.0 2006/12/27 10:57:37 nate_02631 Exp $  *]-->
+<!--[*  Outputs the Main Administration screen                                       *]-->
+
+
+<!--[opentable]-->		
+
+    <!--[opentable2]-->	
+        <span class="pn-pagetitle"><!--[pnml name="_PHOTO_TITLE"]--> <!--[pnml name="_PHOTO_ADMIN_TITLE"]--></span>
+    <!--[closetable2]-->	
+
+    <!--[include file="photogallery_admin_menu.htm" authid=$authid]-->
+
+    <div style="text-align: center;">
+		
+        <!--[opentable2]-->		
+            <p><span class="pn-title"><!--[pnml name="_PHOTO_EDITCATEGORIES"]--></span></p>
+	
+
+        <!--[if $gallerycount]--> 
+            <table class="pg-admintable">
+                <tr class="pn-normal">
+                    <th style="width: 30px" colspan="2">
+					    <!--[pnml name="_PHOTO_ORDER"]-->
+					</th>
+    
+		            <th style="width: 30px">
+					    <!--[pnml name="_PHOTO_ACTIVE"]-->
+					</th>
+										
+					<th style="width: 30px">
+					    <!--[pnml name="_PHOTO_ID"]-->
+					</th>
+		
+		            <th colspan="2">
+					    <!--[pnml name="_PHOTO_GALLERYNAME"]-->
+					</th>
+										
+					<th colspan="2">
+					    <!--[pnml name="_PHOTO_NUMPRODUCTS"]-->
+					</th>
+				</tr>			
+    	        <!--[assign var=count value="0"]-->
+                <!--[section name=key loop=$catinfo.gid]-->
+                    <tr class="<!--[cycle values="pg-odd,pg-even"]--> pn-normal">
+                        <td style="text-align: center">
+						    <!--[if $catinfo.orderperm[$count]]--><!--[if $count]--><a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="decgallery" gid=$catinfo.gid[$count] authid=$authid]-->"><img src="modules/PhotoGallery/pnimages/up.gif" alt="<!--[pnml name="_PHOTO_MOVEUP"]-->" title="<!--[pnml name="_PHOTO_MOVEUP"]-->" style="border: 0px; margin: 0px 2px 0px 2px;" /></a><!--[/if]--><!--[if $count < ($gallerycount-1)]--><a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="incgallery" gid=$catinfo.gid[$count] authid=$authid]-->"><img src="modules/PhotoGallery/pnimages/down.gif" alt="<!--[pnml name="_PHOTO_MOVEDOWN"]-->" title="<!--[pnml name="_PHOTO_MOVEDOWN"]-->" style="border: 0px; margin: 0px 2px 0px 2px;" /></a><!--[/if]--><!--[/if]-->&nbsp;
+						</td>
+				
+		                <td style="text-align: center">
+						    <!--[if $catinfo.orderperm[$count]]--><!--[if $count]--><a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="decgallery" gid=$catinfo.gid[$count] totop=1 authid=$authid]-->"><img src="modules/PhotoGallery/pnimages/up2.gif" alt="<!--[pnml name="_PHOTO_MOVETOTOP"]-->" title="<!--[pnml name="_PHOTO_MOVETOTOP"]-->" style="border: 0px; margin: 0px 2px 0px 2px;" /></a><!--[/if]--><!--[if $count < ($gallerycount-1)]--><a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="incgallery" gid=$catinfo.gid[$count] tobot=1 authid=$authid]-->"><img src="modules/PhotoGallery/pnimages/down2.gif" alt="<!--[pnml name="_PHOTO_MOVETOBOTTOM"]-->" title="<!--[pnml name="_PHOTO_MOVETOBOTTOM"]-->" style="border: 0px; margin: 0px 2px 0px 2px;" /></a><!--[/if]--><!--[/if]-->&nbsp;
+						</td>	
+				
+				        <td style="text-align: center">	
+				            <!--[if $catinfo.active[$count]]--> 
+				                <!--[if $catinfo.activeperm[$count]]-->
+						            <a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="changegallerystatus" gid=$catinfo.gid[$count] status="inactive" authid=$authid]-->">
+				                <!--[/if]-->
+					            <img src="modules/PhotoGallery/pnimages/active.gif" alt="<!--[pnml name="_PHOTO_DEACTIVATE"]-->" title="<!--[pnml name="_PHOTO_DEACTIVATE"]-->" style="border: 0px;" />					 
+                            <!--[else]-->
+					            <!--[if $catinfo.activeperm[$count]]-->
+					                <a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="changegallerystatus" gid=$catinfo.gid[$count] status="active" authid=$authid]-->">
+				                <!--[/if]-->
+					            <img src="modules/PhotoGallery/pnimages/inactive.gif" alt="<!--[pnml name="_PHOTO_ACTIVATE"]-->" title="<!--[pnml name="_PHOTO_ACTIVATE"]-->" style="border: 0px;" />					
+				            <!--[/if]-->
+				            <!--[if $catinfo.activeperm[$count]]-->
+				                </a>
+				            <!--[/if]-->		
+				        </td>
+				
+				        <td>
+						    <!--[$catinfo.gid[$count]]-->
+						</td>
+												
+						<td>
+						    <!--[$catinfo.cat_name[$count]]-->
+						</td> 
+				
+                        <td style="text-align: center"> 
+						    [&nbsp;<a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="editgallery" gid=$catinfo.gid[$count] authid=$authid]-->" class="pn-normal"><!--[pnml name="_PHOTO_EDIT"]--></a>&nbsp;]
+						</td>
+											
+						<td style="text-align: center">
+						    <!--[$catinfo.photocount[$count]]-->
+						</td>
+				
+				        <td style="text-align: center">
+				            <!--[if $catinfo.addphoto[$count]]-->
+				                [&nbsp;<a href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="editphoto" gid=$catinfo.gid[$count] authid=$authid]-->" class="pn-normal"><!--[pnml name="_PHOTO_ADDPHOTO"]--></a>&nbsp;]
+				            <!--[else]-->
+				                &nbsp;
+				            <!--[/if]-->								
+		    			</td>
+					</tr>
+				
+				    <!--[assign var="count" value=$count+1]--> 
+                <!--[/section]-->
+            </table>
+
+        <!--[else]-->
+		    <br />
+		    <div style="text-align: center;">
+			    <span class="pn-normal"><!--[pnml name="_PHOTO_NOCATEGORIESDEFINED"]--></span>
+			</div>
+        <!--[/if]--> 
+    <!--[closetable2]-->
+    </div> 
+		
+<!--[closetable]-->

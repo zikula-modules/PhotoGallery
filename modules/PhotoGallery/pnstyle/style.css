@@ -1,0 +1,27 @@
+/* PhotoGallery v1.0 Stylesheet 
+   Author: Nate Welch 12/27/06 */
+	 
+/* Style for PhotoGallery admin tables */
+.pg-admintable {
+	width: 100%;
+	border-collapse: collapse;
+	border: thin outset;
+	padding: 4px;
+	border-width: 1px;
+}
+
+/* Alternating table cell background colors */
+.pg-admintable tr.pg-even {
+	background-color: transparent;
+}
+
+.pg-admintable tr.pg-odd {
+	background-color: #474849;
+}
+
+/* Cell styles of admin table */
+.pg-admintable td, th{
+	border: thin inset;
+	padding: 6px;
+	border-width: 1px;
+}	 

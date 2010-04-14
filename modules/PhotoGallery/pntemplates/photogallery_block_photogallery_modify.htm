@@ -1,0 +1,80 @@
+<!--[*  $Id: photogallery_block_modify.htm,v 1.0 2006/12/28 23:43:19 nate_02631 Exp $  *]-->
+<!--[*  Edit Form for PhotoGallery Featured/Random Item block                          *]-->
+
+<tr>
+    <td valign="top" class="pn-normal">
+		    <!--[pnml name="_PHOTOBLOCK_RANDOMPHOTOS"]-->
+	</td>
+    
+	<td class="pn-normal" nowrap="nowrap">
+        <!--[if $rand_feat == "rand"]-->
+            <input type="radio" id="photogallery_rand_feat" name="rand_feat" value="rand" CHECKED="CHECKED" class="pn-normal" />
+        <!--[else]-->
+            <input type="radio" id="photogallery_rand_feat" name="rand_feat" value="rand" class="pn-normal" />
+        <!--[/if]-->
+        &nbsp;&nbsp;&nbsp;&nbsp;<!--[pnml name="_PHOTOBLOCK_FROMTHISCAT"]-->:&nbsp;&nbsp;
+        <select id="photogallery_cat_id" name="cat_id" class="pn-normal">
+            <option value="0"><!--[pnml name="_PHOTOBLOCK_SHOWALLCATS"]--></option>
+            <!--[html_options options=$galleryselectlist selected=$cat_id]-->
+        </select>
+    </td>
+</tr>
+	
+				
+<tr>
+    <td valign="top" class="pn-normal">
+	    <!--[pnml name="_PHOTOBLOCK_FEATUREDPHOTO"]-->
+	</td>
+
+    <td class="pn-normal">
+        <!--[if $rand_feat == "feat"]-->
+            <input type="radio" id="photogallery_rand_feat" name="rand_feat" value="feat" CHECKED="CHECKED" class="pn-normal" />
+        <!--[else]-->
+            <input type="radio" id="photogallery_rand_feat" name="rand_feat" value="feat" class="pn-normal" />
+        <!--[/if]-->
+        &nbsp;&nbsp;
+				<select id="photogallery_photo_id" name="photo_id" class="pn-normal">
+            <!--[html_options options=$photoselectlist selected=$photo_id]-->
+        </select>
+    </td>
+</tr>
+				
+<tr>
+    <td valign="top" class="pn-normal">
+		    <!--[pnml name="_PHOTOBLOCK_SHOWLINK"]-->
+	</td>
+		
+    <td class="pn-normal">
+        <!--[if $show_link]-->
+            <input type="checkbox" id="photogallery_show_link" name="show_link" value="1" CHECKED="CHECKED" class="pn-normal" />
+        <!--[else]-->
+            <input type="checkbox" id="photogallery_show_link" name="show_link" value="1" class="pn-normal" />
+        <!--[/if]-->
+    </td>
+</tr>	
+			
+<tr>
+    <td valign="top" class="pn-normal">
+	    <!--[pnml name="_PHOTOBLOCK_SHOWDESC"]-->
+	</td>
+
+    <td class="pn-normal">
+        <!--[if $show_desc]-->
+            <input type="checkbox" id="photogallery_show_desc" name="show_desc" value="1" CHECKED="CHECKED" class="pn-normal" />
+        <!--[else]-->
+            <input type="checkbox" id="photogallery_show_desc" name="show_desc" value="1" class="pn-normal" />
+        <!--[/if]-->
+        &nbsp&nbsp;<!--[pnml name="_PHOTOBLOCK_FIRST"]-->
+        <input type="text" id="photogallery_desc_chars" name="desc_chars" size="3" maxlength="4" value="<!--[$desc_chars|pnvarprepfordisplay]-->" class="pn-normal" /> <!--[pnml name="_PHOTOBLOCK_CHARS"]-->
+    </td>
+</tr>						
+
+<tr>
+    <td valign="top" class="pn-normal">
+	    <!--[pnml name="_PHOTOBLOCK_INTROTEXT"]-->
+	</td>
+		
+	<td class="pn-normal">
+        <textarea id="photogallery_photo_text" name="photo_text" cols="30" rows="2" maxlength="255" class="pn-normal"><!--[$photo_text|pnvarprepfordisplay]--></textarea>
+    </td>
+</tr>

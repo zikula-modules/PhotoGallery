@@ -1,0 +1,75 @@
+<!--[*  $Id: PhotoGallery_admin_batchadd.htm,v 1.0 2007/01/05 09:57:27 nate_02631 Exp $              *]-->
+<!--[*  Outputs the Batch Add Photo screen for batch adding photos upload to gallery image directory *]-->
+
+<!--[pnsecgenauthkey module="PhotoGallery" assign="authid"]-->
+
+<!--[admincategorymenu]-->
+<!--[opentable]-->	
+
+    <div style="text-align: center">
+        <!--[opentable2]-->
+            <span class="pn-pagetitle"><!--[pnml name="_PHOTO_TITLE"]-->: <!--[pnml name="_PHOTO_BATCHADD"]--></span>
+        <!--[closetable2]-->	
+
+        <!--[include file="photogallery_admin_menu.htm" authid=$authid]-->
+    </div>
+    
+    <div class="pn-sub"><!--[pnml name="_PHOTO_BATCHINTRO" html=1]--></div>
+	
+    <form method="post"  enctype="multipart/form-data" action="<!--[pnmodurl modname="PhotoGallery" type="admin" func="batchaddcreate"]-->">
+		<div>	
+        <input type="hidden" id="photogallery_authid" name="authid" value="<!--[$authid]-->" />
+		
+	    <table style="width: 100%; border: 0px; border-spacing: 8px;">
+	    
+		    <tr style="vertical-align: top; text-align: left">
+		        <td>
+				    <span class="pn-normal"><b><!--[pnml name="_PHOTO_PHOTOGALLERY"]-->:</b></span>
+		        </td>
+		
+		        <td>
+				    <select id="photogallery_gid" name="gid" class="pn-normal">
+                        <!--[html_options values=$gallerylist.gid output=$gallerylist.cat_name selected=$gid]-->			
+		            </select>
+		            <br />
+					<span class="pn-sub"><!--[pnml name="_PHOTO_PHOTOBATCHGALLERYDESC"]--></span>
+		        </td>
+		    </tr>	    
+				 		    
+            <tr style="vertical-align: top; text-align: left">
+		        <td style="width: 33%">
+			        <span class="pn-normal"><b><!--[pnml name="_PHOTO_PHOTOBATCHNAME"]-->:</b></span>
+				</td>
+		
+		        <td>
+				    <input type="text" id="photogallery_photobatch_name" name="photobatch_name" value="<!--[$photobatch_name]-->" size="40" maxlength="127" class="pn-normal" />
+		            <br />
+					<span class="pn-sub"><!--[pnml name="_PHOTO_PHOTOBATCHNAMEDESC"]--></span>
+				</td>
+		    </tr>
+		
+		    <tr style="vertical-align: top; text-align: left">
+		        <td>
+				    <span class="pn-normal"><b><!--[pnml name="_PHOTO_PHOTOBATCHDESC"]-->:</b></span>
+				</td>
+		
+		        <td>
+				    <textarea id="photogallery_photobatch_desc" name="photobatch_desc" rows="3" cols="40" class="pn-normal"><!--[$photobatch_desc]--></textarea>
+		            <br />
+					<span class="pn-sub"><!--[pnml name="_PHOTO_PHOTOBATCHDESCDESC"]--></span>
+				</td>
+		    </tr>
+		
+        </table>
+		
+        <br />
+		
+		<div style="text-align: center">
+		    <p><span class="pn-sub"><!--[pnml name="_PHOTO_BATCHOUTTRO"]--></span></p>
+		    <input type="submit" id="photogallery_submit" name="submit" class="pn-normal" style="text-align: center;" value="<!--[pnml name="_PHOTO_BATCHADD"]-->" />
+            &nbsp;<input type="button" id="photogallery_cancel" name="cancel" class="pn-normal" style="text-align: center;" onclick="window.location='<!--[pnmodurl modname="PhotoGallery" type="admin" func="main"]-->'" value="<!--[pnml name="_PHOTO_CANCEL"]-->" />
+		</div>
+	</div>		
+</form>
+
+<!--[closetable]-->	

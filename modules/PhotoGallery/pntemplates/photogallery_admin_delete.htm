@@ -1,0 +1,38 @@
+<!--[*  $Id: photogallery_admin_delete.htm,v 1.0 2006/12/28 10:03:25 nate_02631 Exp $  *]-->
+
+<!--[pnsecgenauthkey module="PhotoGallery" assign="authid"]-->
+
+<!--[admincategorymenu]-->
+<!--[opentable]-->	
+
+    <div style="text-align: center">
+        <!--[opentable2]-->
+            <span class="pn-pagetitle">
+			    <!--[$pagetitle]-->
+			</span>
+        <!--[closetable2]-->	
+
+        <!--[include file="photogallery_admin_menu.htm" authid=$authid]-->
+    </div>
+
+    <div style="text-align: left">
+        <span class="pn-normal"><!--[$confirmtext]--></span>
+	</div>
+			
+	<br />
+	<br />
+    	
+    <form action="<!--[$confirmurl|pnvarprepfordisplay]-->" method="post" enctype="application/x-www-form-urlencoded">
+	    <div style="text-align: center">
+            <input type="hidden" id="photogallery_confirmation" name="confirmation" value="1" />
+	        <input type="hidden" id="photogallery_authid" name="authid" value="<!--[$authid]-->" />	
+	        <input type="submit" value="<!--[pnml name="_PHOTO_CONFIRM"]-->" style="text-align: center;" tabindex="1" id="photogallery_confirm" name="confirm" class="pn-normal" />		
+	        &nbsp;&nbsp;&nbsp;<input type="button" id="photogallery_cancel" name="cancel" class="pn-normal" style="text-align: center;" onclick="window.location='<!--[$cancelurl|pnvarprepfordisplay]-->'" value="<!--[pnml name="_PHOTO_CANCEL"]-->" />
+	    </div>
+    </form>
+			
+	<br />
+	<br />
+	<br />
+
+<!--[closetable]-->	

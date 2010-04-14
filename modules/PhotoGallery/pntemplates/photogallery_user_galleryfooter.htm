@@ -1,0 +1,45 @@
+<!--[*  $Id: photogallery_user_galleryfooter.htm,v 1.0 2006/12/27 11:23:32 nate_02631 Exp $  *]-->
+<!--[*  Outputs the PhotoGallery footer with gallery select list                             *]-->
+<!--[*  This footer makes dropdown using the $allcats variable and selecting the current gallery with $gid  *]-->
+
+<!--[foreach key="mainkey" from=$allcats item="sub"]-->
+	<!--[foreach key="subkey" from=$sub item="value"]-->
+<li><a href="<!--[pnmodurl modname=PhotoGallery func=main gid=$mainkey]-->" style="white-space: nowrap;"><!--[$value|pnmodcallhooks|pnvarprephtmldisplay]--></a></li>
+	<!--[/foreach]-->
+<!--[/foreach]-->
+<!--[*
+<br />
+<div class="tags">
+    <form action="<!--[pnmodurl modname="PhotoGallery" type="user" func="main"]-->" method="post" style="margin: 0px;">
+        <div style="text-align: right;">
+            <span class="pn-normal"><b><!--[pnml name="_PHOTO_JUMPCAT"]-->:</b></span>&nbsp;
+            <select id="photogallery_gid" name="gid" class="pn-normal">
+                <!--[html_options options=$allcats selected=$gid]-->
+            </select>&nbsp;&nbsp;<input type="submit" value="<!--[pnml name="_PHOTO_GO"]-->" />
+        </div>												
+    </form>
+</div>
+  Instead of a dropdown, here's another way to do a category menu - as a traditional horizontal link list
+
+<div style="text-align: center">
+
+<!--[foreach key="mainkey" from=$allcats item="sub"]-->
+	<!--[foreach key="subkey" from=$sub item="value"]-->
+	  <!--[if $linkcount != 0]-->
+	   &nbsp;|&nbsp;
+	  <!--[else]-->
+	      <!--[assign var="linkcount" value=1]--> 	  
+	  <!--[/if]-->
+	  
+	  <!--[if $mainkey != $gid]-->	  
+	      <a href="<!--[pnmodurl modname=PhotoGallery func=main gid=$mainkey]-->" style="white-space: nowrap;"><!--[$value|pnmodcallhooks|pnvarprephtmldisplay]--></a>
+	  <!--[else]-->
+	      <b style="white-space: nowrap;"><!--[$value|pnmodcallhooks|pnvarprephtmldisplay]--></b>
+	  <!--[/if]-->
+	  	  	
+	<!--[/foreach]-->
+<!--[/foreach]-->
+
+</div>
+
+ *]-->

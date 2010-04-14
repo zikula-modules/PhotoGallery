@@ -1,0 +1,4 @@
+<!--[pnmodgetvar module="PhotoGallery" assign="imagepath" name="imagepath"]-->
+<div style="width: 100px; height: 66px; overflow: hidden; text-align: center; padding: 0; margin: 0 auto;"><a href="<!--[pnmodurl modname="photogallery" type="user" func="detail" pid=$photo.pid]-->&amp;title=<!--[$photo.name|replace:" ":"."|regex_replace:"/[^a-zA-Z0-9_\.]/":""]-->"  title="<!--[$photo.name]-->"><img src="<!--[$imagepath]--><!--[pnml name="_PHOTO_IMAGEPREFIX"]--><!--[$photo.pid]--><!--[pnml name="_PHOTO_SMALLIMAGESUFFIX"]-->.<!--[$photo.image]-->" alt="<!--[$photo.name]-->" style="border: 0" /></a></div>
+<br />
+[&nbsp;<a href="<!--[pnmodurl modname="photogallery" type="user" func="main"]-->" title="Naar Slagerij Leander's fotogalerij">Bekijk fotogalerij</a>&nbsp;]

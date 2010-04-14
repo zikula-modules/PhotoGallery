@@ -1,0 +1,164 @@
+<!--[*  $Id: PhotoGallery_admin_modifyconfig.htm,v 1.0 2006/12/28 09:57:27 nate_02631 Exp $  *]-->
+<!--[*  Outputs the Modify Configuration screen for updating the gallery's parameters        *]-->
+
+<!--[pnsecgenauthkey module="PhotoGallery" assign="authid"]-->
+
+<!--[admincategorymenu]-->
+<!--[opentable]-->	
+
+    <div style="text-align: center;">
+        <!--[opentable2]-->
+            <span class="pn-pagetitle"><!--[pnml name="_PHOTO_TITLE"]-->: <!--[pnml name="_PHOTO_MODIFYCONFIG"]--></span>
+        <!--[closetable2]-->	
+
+        <!--[include file="photogallery_admin_menu.htm" authid=$authid]-->
+    </div>
+		
+    <form method="post" action="<!--[pnmodurl modname="PhotoGallery" type="admin" func="updateconfig"]-->">
+		<div>
+            <input type="hidden" id="photogallery_authid" name="authid" value="<!--[$authid]-->" />
+		
+		    <table style="width: 100%; border: 0px; border-spacing: 8px;">
+		
+		        <tr style="vertical-align: top; text-align: left">
+		            <td>
+					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_GALLERYNAME"]-->:</b></span>
+					</td>
+		
+		            <td>
+					    <input type="text" id="photogallery_galleryname" name="galleryname" value="<!--[$galleryname|pnvarprepfordisplay]-->" size="40" class="pn-normal" />
+		                <br />
+						<span class="pn-sub"><!--[pnml name="_PHOTO_GALLERYNAMEDESC"]--></span>
+					</td>
+		        </tr>
+		
+		        <tr style="vertical-align: top; text-align: left">
+		            <td>
+					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_GALLERYINTRO"]-->:</b></span>
+					</td>
+		            
+					<td>
+		                <textarea id="photogallery_galleryintro" name="galleryintro" rows="3" cols="40" class="pn-normal"><!--[$galleryintro|pnvarprepfordisplay]--></textarea>
+		                <br />
+						<span class="pn-sub"><!--[pnml name="_PHOTO_GALLERYINTRODESC"]--></span>
+		            </td>
+		        </tr>
+	
+		
+		        <tr style="vertical-align: top; text-align: left">
+		            <td>
+					   <span class="pn-normal"><b><!--[pnml name="_PHOTO_GALLERYCOLUMNS"]-->:</b></span>
+					</td>
+		
+		            <td>
+					   <select id="photogallery_gallerycolumns" name="gallerycolumns" class="pn-normal">
+		                   <!--[html_options output=$gallerycolumnslist values=$gallerycolumnslist selected=$gallerycolumns]-->
+		               </select>
+		               <br /><span class="pn-sub"><!--[pnml name="_PHOTO_GALLERYCOLUMNSDESC"]--></span>
+		            </td>
+		        </tr>
+		        
+		        <tr style="vertical-align: top; text-align: left">
+		            <td>
+					   <span class="pn-normal"><b><!--[pnml name="_PHOTO_PHOTOCOLUMNS"]-->:</b></span>
+					</td>
+		
+		            <td>
+					   <select id="photogallery_photocolumns" name="photocolumns" class="pn-normal">
+		                    <!--[html_options output=$photoscolumnslist values=$photoscolumnslist selected=$photocolumns]-->
+		                </select>
+		                <br /><span class="pn-sub"><!--[pnml name="_PHOTO_PHOTOCOLUMNSDESC"]--></span>
+		            </td>
+		        </tr>			        		
+
+		        <tr style="vertical-align: top; text-align: left">
+		            <td>
+				        <span class="pn-normal"><b><!--[pnml name="_PHOTO_PHOTOSPERPAGE"]-->:</b></span>
+					</td>
+		        
+					<td>
+					    <select id="photogallery_photosperpage" name="photosperpage" class="pn-normal">
+		                    <!--[html_options output=$photosperpagelist values=$photosperpagelist selected=$photosperpage]-->
+		                </select>
+		                <br />
+						<span class="pn-sub"><!--[pnml name="_PHOTO_PHOTOSPERPAGEDESC"]--></span>
+					</td>
+		        </tr>
+		
+		        <tr style="vertical-align: top; text-align: left">
+		            <td>
+					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_PHOTOSIZE"]-->:</b></span>
+					</td>
+		
+		            <td>
+						<input type="text" id="photogallery_photosize" name="photosize" value="<!--[$photosize|pnvarprepfordisplay]-->" size="8" class="pn-normal" />
+		                <br />
+				        <span class="pn-sub"><!--[pnml name="_PHOTO_PHOTOSIZEDESC"]--></span>
+					</td>
+		        </tr>
+		        
+		        <tr style="vertical-align: top; text-align: left">
+		            <td>
+					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_THUMBNAILSIZE"]-->:</b></span>
+					</td>
+		
+		            <td>
+						<input type="text" id="photogallery_thumbnailsize" name="thumbnailsize" value="<!--[$thumbnailsize|pnvarprepfordisplay]-->" size="8" class="pn-normal" />
+		                <br />
+					    <span class="pn-sub"><!--[pnml name="_PHOTO_THUMBNAILSIZEDESC"]--></span>
+				    </td>
+		        </tr>
+		        
+		        <tr style="vertical-align: top; text-align: left">
+		            <td>
+					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_IMAGEFORMAT"]-->:</b></span>
+					</td>
+		
+		            <td>
+		                <select id="photogallery_imageformat" name="imageformat" class="pn-normal">
+		                    <!--[html_options options=$imageformatlist selected=$imageformat]-->
+		                </select>
+						<br />
+						<span class="pn-sub"><!--[pnml name="_PHOTO_IMAGEFORMATDESC"]--></span>
+				    </td>
+		        </tr>			        	
+		        
+		        <tr style="vertical-align: top; text-align: left">
+		            <td>
+					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_IMAGEQUALITY"]-->:</b></span>
+					</td>
+		
+		            <td>
+		                <select id="photogallery_imagequality" name="imagequality" class="pn-normal">
+		                    <!--[html_options output=$imagequalitylist values=$imagequalitylist selected=$imagequality]-->
+		                </select>
+						<br />
+					    <span class="pn-sub"><!--[pnml name="_PHOTO_IMAGEQUALITYDESC"]--></span>
+					</td>
+		        </tr>		        	        
+		
+		        <tr style="vertical-align: top; text-align: left">
+		            <td>
+					    <span class="pn-normal"><b><!--[pnml name="_PHOTO_IMAGEPATH"]-->:</b></span>
+					</td>
+		
+		            <td>
+					    <input type="text" id="photogallery_imagepath" name="imagepath" value="<!--[$imagepath|pnvarprepfordisplay]-->" size="40" class="pn-normal" />
+		                <br />
+						<span class="pn-sub"><!--[pnml name="_PHOTO_IMAGEPATHDESC"]--></span>
+					</td>
+		        </tr>		
+		
+        </table>
+    
+		<br />
+		
+        <div style="text-align: center;">
+		    <input type="submit" id="photogallery_submit" name="submit" class="pn-normal" style="text-align: center;" value="<!--[pnml name="_PHOTO_UPDATECONFIG"]-->" />
+	         &nbsp;&nbsp;&nbsp;<input type="button" id="photogallery_cancel" name="cancel" class="pn-normal" style="text-align: center;" onclick="window.location='<!--[pnmodurl modname="PhotoGallery" type="admin" func="main"]-->'" value="<!--[pnml name="_PHOTO_CANCEL"]-->" />
+        </div>
+				
+    </div>
+</form>
+		
+<!--[closetable]-->	
