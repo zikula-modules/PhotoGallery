@@ -7,6 +7,8 @@
 <!--[gt assign="lblAdd" text="Add a Photo"]-->
 <!--[gt assign="lblEdit" text="Edit Gallery"]-->
 <!--[gt assign="lblDelete" text="Delete Gallery"]-->
+<!--[gt assign="lblActivate" text="Click to activate this item"]-->
+<!--[gt assign="lblDeactivate" text="Click to deactivate this item"]-->
 
 <h2><!--[$pageTitle]--></h2>
 <table class="z-admintable" summary="<!--[$pageTitle]-->" width="100%">
@@ -28,9 +30,9 @@
         			<td><!--[$object.photocount]--></td>
 				<td align="center">
 					<!--[if ($object.active)]-->
-						<a class="activationbutton" href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="changegallerystatus" gid=$object.gid authid=$authid]-->"><!--[pnimg src='greenled.gif' modname='core' set='icons/extrasmall' alt=$lblDeactivate]--></a>
+						<a class="activationbutton" href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="changegallerystatus" gid=$object.gid authid=$authid]-->"><!--[pnimg src='greenled.gif' modname='core' set='icons/extrasmall' title=$lblDeactivate alt=$lblDeactivate]--></a>
 					<!--[else]-->
-						<a class="activationbutton" href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="changegallerystatus" gid=$object.gid authid=$authid]-->"><!--[pnimg src='redled.gif' modname='core' set='icons/extrasmall' alt=$lblActivate]--></a>
+						<a class="activationbutton" href="<!--[pnmodurl modname="PhotoGallery" type="admin" func="changegallerystatus" gid=$object.gid authid=$authid]-->"><!--[pnimg src='redled.gif' modname='core' set='icons/extrasmall' title=$lblActivate alt=$lblActivate]--></a>
 					<!--[/if]-->
         			</td>
         			<td align="center"><!--[$object.order]-->TODO</td>
