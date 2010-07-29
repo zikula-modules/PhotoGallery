@@ -239,7 +239,7 @@ function photogallery_adminapi_creategallery($args)
 
     $order = DBUtil::selectFieldMax ('photogallery_galleries', 'sortorder', 'MAX');
 
-    $args['order'] = $order+1;
+    $args['sortorder'] = $order+1;
     $args['name']  = $args['cat_name'];
     $rc = DBUtil::insertObject ($args, 'photogallery_galleries', 'gid');
     if ($rc === false) {
